@@ -15,27 +15,68 @@ datasource db {
 }
 
 model users {
-  id Int @id @default(autoincrement())
+  id String @id @default(cuid())
   username String @unique
   firstname String
   lastname String
   password String
   email String @unique
+  bio String?
+  socialMedia String[]
   posts posts[]
+  commentsByMe comments[]
+  likesByMe likesOnPosts[]
+  replyByMe repliesOnComments[]
+
+  follower followRelationShip[] @relation("follower")
+  following followRelationShip[] @relation("following")
 }
 
 model posts {
-  id Int @id @default(autoincrement())
+  id String @id @default(cuid())
   title String
   content String
-  images images[]
-  authorId Int
+  images String[]
+  videos String[]
+  authorId String
   author users @relation(fields: [authorId], references: [id])
+  commentsOnMe comments[]
+  likedOnMe likesOnPosts[]
 }
 
-model images {
-  id Int @id @default(autoincrement())
-  imageUrl String
-  postId Int
-  post posts @relation(fields: [postId], references: [id])
+model comments {
+  id String @id @default(cuid())
+  content String
+  likesOnComments Int
+  user_id String
+  post_id String
+  user users @relation(fields: [user_id], references: [id])
+  post posts @relation(fields: [post_id], references: [id])
+  replyOnMe repliesOnComments[]
+}
+
+model  repliesOnComments{
+  id String @id @default(cuid())
+  content String
+  likes Int
+  user_id String
+  comments_id String
+  repliedBy users @relation(fields: [user_id], references: [id])
+  comments comments @relation(fields: [comments_id], references: [id])
+}
+
+model  likesOnPosts{
+  id String @id @default(cuid())
+  user_id String
+  post_id String
+  likedBy users @relation(fields: [user_id], references: [id])
+  post posts @relation(fields: [post_id], references: [id])
+}
+
+model followRelationShip {
+  id String @id @default(cuid())
+  followedBy_id String
+  followedTo_id String
+  follower users @relation("follower", fields: [followedBy_id], references: [id])
+  following users @relation("following", fields: [followedTo_id], references: [id])
 }

@@ -4,6 +4,7 @@ import { env } from "hono/adapter";
 import { createPrismaClient } from "..";
 import { Buffer } from "buffer";
 import { sign } from "hono/jwt";
+import { signInField } from "@ayush8679/common";
 
 const signin = new Hono();
 
@@ -14,13 +15,7 @@ signin.post('/signin', async (c) => {
     
         const req = c.req;
         const body = await req.json();
-    
-        const userField = z.object({
-            userName : z.string().min(3).max(8),
-            password : z.string().min(3).max(50)
-        });
-    
-        const parsedRequest = userField.safeParse(body);
+        const parsedRequest = signInField.safeParse(body);
         
         if(!parsedRequest.success){
             return c.json({

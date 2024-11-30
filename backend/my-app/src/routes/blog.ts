@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { createPrismaClient } from "..";
 import { z } from "zod";
+import { createBlogField } from "@ayush8679/common";
 
 const blog = new Hono();
 
@@ -50,12 +51,8 @@ blog.patch("/", async (c) => {
         const jwtPayload = await c.get("jwtPayload");
         const userId = jwtPayload.userId
 
-        const userField = z.object({
-            postId : z.number(),
-            title : z.string().min(3).max(50).optional(),
-            content : z.string().min(3).max(1000).optional()
-        })
-        const parsedData = userField.safeParse(body);
+        const parsedData = createBlogField.safeParse(body);
+        
         if (!parsedData.success) {
             return c.json({
                 message : parsedData.error.issues[0].message
@@ -66,7 +63,7 @@ blog.patch("/", async (c) => {
 
         const post = await prisma.posts.update({
             where : { id : usersInput.postId },
-            data : { 
+            data : {
                 title : usersInput.title && usersInput.title,
                 content : usersInput.content && usersInput.content,
              }

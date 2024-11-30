@@ -7,6 +7,8 @@ import { decode, sign, verify } from "hono/jwt";
 import { createPrismaClient } from "..";
 import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
 import { Buffer } from "buffer";
+import { signUpfield } from "@ayush8679/common";
+
 const signup = new Hono();
 
 signup.post('/signup',async (c) => {
@@ -18,16 +20,8 @@ signup.post('/signup',async (c) => {
         const request = c.req;
         // const formBody = await request.parseBody(); For form data
         const body = await request.json(); // for json  
-    
-        const userField = z.object({
-            firstName : z.string().min(3).max(50),
-            lastName : z.string().min(3).max(50),
-            userName : z.string().min(3).max(8),
-            password : z.string().min(3).max(50),
-            email : z.string().email()
-        })
-    
-        const parsedRequest = userField.safeParse(body);
+
+        const parsedRequest = signUpfield.safeParse(body);
         
         if(!parsedRequest.success){
             return c.json({
