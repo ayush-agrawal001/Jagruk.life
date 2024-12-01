@@ -1,6 +1,6 @@
 {
   "name": "@ayush8679/common",
-  "version": "1.0.0",
+  "version": "1.0.7",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@ayush8679/common": "^1.0.7",
     "zod": "^3.23.8"
   }
 }

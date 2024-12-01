@@ -21,13 +21,12 @@ model users {
   lastname String
   password String
   email String @unique
-  bio String?
+  bio String? @default("")
   socialMedia String[]
   posts posts[]
   commentsByMe comments[]
   likesByMe likesOnPosts[]
   replyByMe repliesOnComments[]
-
   follower followRelationShip[] @relation("follower")
   following followRelationShip[] @relation("following")
 }
@@ -47,7 +46,7 @@ model posts {
 model comments {
   id String @id @default(cuid())
   content String
-  likesOnComments Int
+  likesOnComments Int @default(0)
   user_id String
   post_id String
   user users @relation(fields: [user_id], references: [id])
@@ -79,4 +78,6 @@ model followRelationShip {
   followedTo_id String
   follower users @relation("follower", fields: [followedBy_id], references: [id])
   following users @relation("following", fields: [followedTo_id], references: [id])
+  
+  @@unique([followedBy_id, followedTo_id])
 }

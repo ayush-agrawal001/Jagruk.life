@@ -10,6 +10,12 @@ export const authMiddleware = createMiddleware(async (c, next) => {
         const req = c.req;
         const Bearer = req.header("Authorization")
         const token = Bearer?.split(" ")[1];
+        
+        if (!token) {
+            return c.json({
+                message : "No token found"
+            })
+        }
         const isVerifiedToken = await verify(token!, JWT_SECRET);
 
         if(!isVerifiedToken.username){
@@ -25,9 +31,14 @@ export const authMiddleware = createMiddleware(async (c, next) => {
                 username : userName
             }
         })
-
-        c.set("jwtPayload" , {userId : user?.id,})
-        await next();
+        if (user) {
+            c.set("jwtPayload" , {userId : user?.id,})
+            await next();
+        }else{
+            return c.json({
+                message : "Can not get the user account"
+            })
+        }
     } catch (error) {
         console.log("Error", error);
         return c.json({

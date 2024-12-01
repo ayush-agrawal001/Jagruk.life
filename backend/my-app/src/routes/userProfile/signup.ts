@@ -1,11 +1,7 @@
-import { PrismaClient } from "@prisma/client/edge";
-import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { env } from "hono/adapter";
-import { z } from "zod"
-import { decode, sign, verify } from "hono/jwt";
-import { createPrismaClient } from "..";
-import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
+import {sign } from "hono/jwt";
+import { createPrismaClient } from "../..";
 import { Buffer } from "buffer";
 import { signUpfield } from "@ayush8679/common";
 
@@ -31,7 +27,6 @@ signup.post('/signup',async (c) => {
         
         const usersInput = parsedRequest.data
 
-        
         const passText = new TextEncoder().encode(usersInput.password);
 
         const hashPass = await crypto.subtle.digest(
@@ -89,6 +84,5 @@ signup.post('/signup',async (c) => {
 
 })
 
-
-
+    
 export default signup;

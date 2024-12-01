@@ -1,7 +1,6 @@
 import { Hono } from "hono";
-import { z } from "zod";
 import { env } from "hono/adapter";
-import { createPrismaClient } from "..";
+import { createPrismaClient } from "../..";
 import { Buffer } from "buffer";
 import { sign } from "hono/jwt";
 import { signInField } from "@ayush8679/common";
