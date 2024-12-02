@@ -41,6 +41,44 @@ commentRoute.post("/id/:id/comment", async (c) => {
             error : "Something went wrong"
         })        
     }
+})
+
+commentRoute.get("/id/:id/:commentid/like", async (c) => {
+    try {
+        const prisma = createPrismaClient(c);
+        const jwtPayload = c.get("jwtPayload");
+        const userId = jwtPayload.userId;
+        const body = await c.req.json();
+    
+        const commentId = c.req.param("commentid");
+
+        const comment = await prisma.comments.update({where : {id : commentId}, data : {likesOnComments : {push : userId}}});
+        const likesOnComments = comment.likesOnComments
+
+        for (let i = 0; i < likesOnComments.length; i++) {
+            if (likesOnComments === userId) {
+                return c.json({
+                    mssage : "Already liked"
+                })
+            }
+        }
+
+        if (comment) {
+            return c.json({
+                message : "Liked the comment"
+            })
+        }else{
+            return c.json({
+                message : "Something went wrong!!"
+            })
+        }
+    } catch (error) {
+        console.error("ERROR LIKING THE COMMENT", error)
+        return c.json({
+            error : "ERROR LIKING THE COMMENT"
+        });
+    }
+    
 
 })
 

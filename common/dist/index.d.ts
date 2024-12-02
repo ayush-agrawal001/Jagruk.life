@@ -26,8 +26,9 @@ export declare const updateUserFields: z.ZodObject<{
     oldPassword: z.ZodOptional<z.ZodString>;
     email: z.ZodOptional<z.ZodString>;
     bio: z.ZodOptional<z.ZodString>;
-    socialMedia: z.ZodOptional<z.ZodString>;
+    socialMedia: z.ZodArray<z.ZodOptional<z.ZodString>, "many">;
 }, "strip", z.ZodTypeAny, {
+    socialMedia: (string | undefined)[];
     firstName?: string | undefined;
     lastName?: string | undefined;
     userName?: string | undefined;
@@ -35,8 +36,8 @@ export declare const updateUserFields: z.ZodObject<{
     email?: string | undefined;
     oldPassword?: string | undefined;
     bio?: string | undefined;
-    socialMedia?: string | undefined;
 }, {
+    socialMedia: (string | undefined)[];
     firstName?: string | undefined;
     lastName?: string | undefined;
     userName?: string | undefined;
@@ -44,7 +45,6 @@ export declare const updateUserFields: z.ZodObject<{
     email?: string | undefined;
     oldPassword?: string | undefined;
     bio?: string | undefined;
-    socialMedia?: string | undefined;
 }>;
 export declare const signInField: z.ZodObject<{
     userName: z.ZodString;
@@ -60,14 +60,20 @@ export declare const createBlogField: z.ZodObject<{
     postId: z.ZodNumber;
     title: z.ZodString;
     content: z.ZodString;
+    image: z.ZodArray<z.ZodString, "many">;
+    video: z.ZodArray<z.ZodString, "many">;
 }, "strip", z.ZodTypeAny, {
     postId: number;
     title: string;
     content: string;
+    image: string[];
+    video: string[];
 }, {
     postId: number;
     title: string;
     content: string;
+    image: string[];
+    video: string[];
 }>;
 export declare const updateBlogField: z.ZodObject<{
     postId: z.ZodNumber;

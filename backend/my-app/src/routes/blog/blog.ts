@@ -25,9 +25,11 @@ blog.post('/', async (c) => {
             data : {
                 title : usersInput.title,
                 content : usersInput.content,
-                authorId : userId
+                authorId : userId,
+                images : usersInput.image,
+                videos : usersInput.video,
             }
-        })  
+        })
 
         return c.text("Added your blog");
     } catch (error) {

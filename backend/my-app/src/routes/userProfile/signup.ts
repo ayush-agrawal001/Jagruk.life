@@ -52,7 +52,7 @@ signup.post('/signup',async (c) => {
 
         const token = await sign({
             username : usersInput.userName,
-            eamil : users.password,
+            email : users.email,
             expiresIn : "24h",
         },JWT_SECRET)
 

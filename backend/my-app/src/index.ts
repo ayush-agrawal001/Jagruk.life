@@ -24,8 +24,8 @@ export function createPrismaClient(c : Context) {
   }).$extends(withAccelerate());
 }
 
-app.use("/api/v1/user/blog/", (c, next) => authMiddleware(c, next));
-app.use("/api/v1/user/update/", (c, next) => authMiddleware(c, next));
+app.use("/api/v1/user/blog/*", (c, next) => authMiddleware(c, next));
+app.use("/api/v1/user/update/*", (c, next) => authMiddleware(c, next));
 
 app.get('/', (c) => {
   return c.text('Hello Hono!')

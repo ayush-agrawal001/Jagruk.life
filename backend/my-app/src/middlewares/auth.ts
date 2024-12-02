@@ -10,7 +10,6 @@ export const authMiddleware = createMiddleware(async (c, next) => {
         const req = c.req;
         const Bearer = req.header("Authorization")
         const token = Bearer?.split(" ")[1];
-        
         if (!token) {
             return c.json({
                 message : "No token found"
@@ -32,6 +31,7 @@ export const authMiddleware = createMiddleware(async (c, next) => {
             }
         })
         if (user) {
+            console.log("auth")
             c.set("jwtPayload" , {userId : user?.id,})
             await next();
         }else{
