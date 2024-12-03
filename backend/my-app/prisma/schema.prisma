@@ -57,7 +57,7 @@ model comments {
 model  repliesOnComments{
   id String @id @default(cuid())
   content String
-  likes Int
+  likes String[]
   user_id String
   comments_id String
   repliedBy users @relation(fields: [user_id], references: [id])
@@ -70,6 +70,9 @@ model  likesOnPosts{
   post_id String
   likedBy users @relation(fields: [user_id], references: [id])
   post posts @relation(fields: [post_id], references: [id])
+
+  
+  @@unique([user_id, post_id])
 }
 
 model followRelationShip {

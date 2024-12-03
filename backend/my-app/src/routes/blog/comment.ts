@@ -5,7 +5,7 @@ import {z} from "zod"
 
 const commentRoute = new Hono();
 
-commentRoute.post("/id/:id/comment", async (c) => {
+commentRoute.post("/:id/comment", async (c) => {
     try {
         const prisma = createPrismaClient(c);
         const postId = c.req.param("id")
@@ -43,7 +43,7 @@ commentRoute.post("/id/:id/comment", async (c) => {
     }
 })
 
-commentRoute.get("/id/:id/:commentid/like", async (c) => {
+commentRoute.get("/:id/:commentid/like", async (c) => {
     try {
         const prisma = createPrismaClient(c);
         const jwtPayload = c.get("jwtPayload");
@@ -51,17 +51,28 @@ commentRoute.get("/id/:id/:commentid/like", async (c) => {
         const body = await c.req.json();
     
         const commentId = c.req.param("commentid");
-
-        const comment = await prisma.comments.update({where : {id : commentId}, data : {likesOnComments : {push : userId}}});
-        const likesOnComments = comment.likesOnComments
-
+        
+        const commentCheck = await prisma.comments.findUnique({where : {id : commentId}})
+        if (!commentCheck) {
+            return c.json({
+                message : "No comment found"
+            })
+        }
+        const likesOnComments = commentCheck!.likesOnComments
+        
         for (let i = 0; i < likesOnComments.length; i++) {
-            if (likesOnComments === userId) {
+            if (likesOnComments[i] === userId) {
+                await prisma.comments.update({
+                    where : {id : commentId}, 
+                    data : { likesOnComments : likesOnComments.filter((likeId) => likeId !== userId)}
+                })
                 return c.json({
-                    mssage : "Already liked"
+                    mssage : "dis-liked"
                 })
             }
         }
+
+        const comment = await prisma.comments.update({where : {id : commentId}, data : {likesOnComments : {push : userId}}});
 
         if (comment) {
             return c.json({
