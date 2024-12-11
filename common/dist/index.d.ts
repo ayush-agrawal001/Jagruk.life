@@ -60,33 +60,39 @@ export declare const createBlogField: z.ZodObject<{
     postId: z.ZodNumber;
     title: z.ZodString;
     content: z.ZodString;
-    image: z.ZodArray<z.ZodString, "many">;
-    video: z.ZodArray<z.ZodString, "many">;
+    image: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    video: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
     postId: number;
     title: string;
     content: string;
-    image: string[];
-    video: string[];
+    image?: string[] | undefined;
+    video?: string[] | undefined;
 }, {
     postId: number;
     title: string;
     content: string;
-    image: string[];
-    video: string[];
+    image?: string[] | undefined;
+    video?: string[] | undefined;
 }>;
 export declare const updateBlogField: z.ZodObject<{
     postId: z.ZodNumber;
     title: z.ZodOptional<z.ZodString>;
     content: z.ZodOptional<z.ZodString>;
+    image: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    video: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
     postId: number;
     title?: string | undefined;
     content?: string | undefined;
+    image?: string[] | undefined;
+    video?: string[] | undefined;
 }, {
     postId: number;
     title?: string | undefined;
     content?: string | undefined;
+    image?: string[] | undefined;
+    video?: string[] | undefined;
 }>;
 export declare const addComment: z.ZodObject<{
     comment: z.ZodString;

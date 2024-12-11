@@ -11,11 +11,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { isSignInPop, isSignUpPop } from "@/atoms";
-import axios from "axios"
-import {SignUpfield} from "@ayush8679/common"
+import { signInField, SignInField } from "@ayush8679/common";
 
 interface propsForDialog {
   titleForButton: string;
@@ -29,31 +28,50 @@ export default function DialogSignInButton({
 
     const [isSignInValue, setIsSignIn] = useRecoilState(isSignInPop);
     const [isSignUpValue, setIsSignUp] = useRecoilState(isSignUpPop);
-    const [email, setEmail] = useState("");
-    const [userName, setUserName] = useState("");
-    const [password, setPassword] = useState("");
+    const [error , setError] = useState<Record<string, string>>();
+    const [formData, setFormData] = useState<SignInField>({
+        userName : "",
+        password : ""
+    })
+
+    const handleChange = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = e.target
+        setFormData((prev) => ({
+            ...prev,
+            [name] : value
+        }))
+        console.log(formData)
+    }, [formData])
+
+    useEffect(() => {
+        const result = signInField.safeParse(formData);
+        if (!result.success) {
+            const newError : Record<string, string> = {};
+            result.error.errors.forEach((err) => {
+                if (err.path[0]) {
+                    newError[err.path[0] as string] = err.message
+                }
+            })
+            setError(newError);
+            console.log(formData);
+            console.log(newError);
+        }else{
+            setError({});
+        }
+    }, [formData])
 
     const handleInToUpSwitch = useCallback(() => {
         setIsSignIn(() => false)
         setIsSignUp(() => true)
     },[isSignInValue, isSignUpValue])
 
-    const userField = {
-        email : email,
-        userName : userName,
-        password : password
-    }
 
-    const isCorrectField = {
-        email : userField.email typeof 
-    }
-
-    const sendSignUpReq = useCallback(async () => {
-        const req = await axios.post("https://my-app.ayushthestar8679.workers.dev/api/v1/user/signup", {
+    // const sendSignUpReq = useCallback(async () => {
+    //     const req = await axios.post("https://my-app.ayushthestar8679.workers.dev/api/v1/user/signup", {
             
-        })
-        console.log(req);
-    }, [])
+    //     })
+    //     console.log(req);
+    // }, [])
 
     return (
         <Dialog open={isSignInValue} onOpenChange={setIsSignIn}>
@@ -74,12 +92,15 @@ export default function DialogSignInButton({
                 Email
                 </Label>
                 <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
+                id="UsrName"
+                type="text"
+                name="userName"
+                placeholder="Enter your username"
                 className="w-full"
+                onChange={ (e) => {handleChange(e)}}
                 required
                 />
+                {error && (error.userName && <p className="text-sm text-red-500">{error.userName}</p>)}
             </div>
             <div>
                 <Label htmlFor="password" className="block mb-1">
@@ -88,10 +109,13 @@ export default function DialogSignInButton({
                 <Input
                 id="password"
                 type="password"
+                name="password"
                 placeholder="Enter your password"
                 className="w-full"
+                onChange={ (e) => {handleChange(e)}}
                 required
                 />
+                {error && (error.password && <p className="text-sm text-red-500">{error.password}</p>)}
             </div>
             <div>
                 <Button
@@ -100,7 +124,7 @@ export default function DialogSignInButton({
                 className="flex items-center rounded-3xl border-gray-900 justify-center w-full gap-2"
                 >
                 <MdEmail className="2-5 h-5"/>
-                Sign In With Email
+                Sign In With User Name
                 </Button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">

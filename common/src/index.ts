@@ -3,16 +3,16 @@ import { z } from "zod";
 export const signUpfield = z.object({
     firstName : z.string().min(3).max(50),
     lastName : z.string().min(3).max(50),
-    userName : z.string().min(3).max(8),
-    password : z.string().min(3).max(50),
+    userName : z.string().min(6).max(8),
+    password : z.string().min(8).max(50),
     email : z.string().email()
 })
 
 export const updateUserFields = z.object({
     firstName : z.string().min(3).max(50).optional(),
     lastName : z.string().min(3).max(50).optional(),
-    userName : z.string().min(3).max(8).optional(),
-    password : z.string().min(3).max(50).optional(),
+    userName : z.string().min(6).max(8).optional(),
+    password : z.string().min(8).max(50).optional(),
     oldPassword : z.string().min(3).max(50).optional(),
     email : z.string().email().optional(),
     bio : z.string().optional(),
@@ -20,8 +20,8 @@ export const updateUserFields = z.object({
 })
 
 export const signInField = z.object({
-    userName : z.string().min(3).max(8),
-    password : z.string().min(3).max(50)
+    userName : z.string().min(6).max(8),
+    password : z.string().min(8).max(50)
 });
 
 export const createBlogField = z.object({
