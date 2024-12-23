@@ -12,6 +12,7 @@ import updateUser from './routes/userProfile/updateUserProfile'
 import commentReply from './routes/blog/commentReply'
 import likeBlog from './routes/blog/likeBlog'
 import followUser from './routes/userProfile/followUser'
+import { cors } from 'hono/cors'
 
 const app = new Hono<{Bindings : {
   DATABASE_URL : string,
@@ -27,7 +28,13 @@ export function createPrismaClient(c : Context) {
     datasourceUrl: DATABASE_URL,
   }).$extends(withAccelerate());
 }
-
+app.use(cors(
+  {
+    origin : "http://localhost:5173",
+    allowMethods : ["GET","POST","PUT","DELETE"],
+    allowHeaders : ["Content-Type","Authorization"]
+  }
+));
 app.use("/api/v1/user/blog/*", (c, next) => authMiddleware(c, next));
 app.use("/api/v1/user/update/*", (c, next) => authMiddleware(c, next));
 app.use("/api/v1/user/:id/follow", (c, next) => authMiddleware(c, next));

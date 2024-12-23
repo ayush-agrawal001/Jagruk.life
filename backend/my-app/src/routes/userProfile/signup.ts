@@ -57,6 +57,7 @@ signup.post('/signup',async (c) => {
         },JWT_SECRET)
 
         c.header("Authorization", `Bearer ${token}`);
+        c.status(201);
         return c.json({
             message : `Hello from SignUp!! ${users.firstname}`,
             token : token

@@ -11,10 +11,15 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRecoilState } from "recoil";
 import { isSignInPop, isSignUpPop } from "@/atoms";
 import { signInField, SignInField } from "@ayush8679/common";
+import axios from "axios";
+import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { signInWithGithub, signInWithGoogle } from "@/lib/githubAndGoogle";
 
 interface propsForDialog {
   titleForButton: string;
@@ -32,18 +37,12 @@ export default function DialogSignInButton({
     const [formData, setFormData] = useState<SignInField>({
         userName : "",
         password : ""
-    })
+    });
 
-    const handleChange = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target
-        setFormData((prev) => ({
-            ...prev,
-            [name] : value
-        }))
-        console.log(formData)
-    }, [formData])
 
-    useEffect(() => {
+    const navigate = useNavigate();
+
+    const checkCredentials = () => {
         const result = signInField.safeParse(formData);
         if (!result.success) {
             const newError : Record<string, string> = {};
@@ -53,11 +52,20 @@ export default function DialogSignInButton({
                 }
             })
             setError(newError);
-            console.log(formData);
-            console.log(newError);
+            console.log(newError)
+            return false;
         }else{
             setError({});
-        }
+            return true;
+        }}
+
+    const handleChange = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = e.target
+        setFormData((prev) => ({
+            ...prev,
+            [name] : value
+        }))
+        // console.log(formData)
     }, [formData])
 
     const handleInToUpSwitch = useCallback(() => {
@@ -65,13 +73,60 @@ export default function DialogSignInButton({
         setIsSignUp(() => true)
     },[isSignInValue, isSignUpValue])
 
+    const signInByEmail = useCallback(async () => {
+        try {
+            if(checkCredentials()){
+                try {
+                    const response = await axios.post("http://127.0.0.1:8787/api/v1/user/signin", formData);
+                    if (response.status === 201) {
+                        navigate("/dashboard");
+                    }else{
+                        toast({
+                            title: "Error",
+                            description: "Error signing with user name",
+                        });
+                        navigate("/");
+                    }
+                } catch (error : Error | any) {
+                    if(error.status === 403){
+                        toast({
+                            title: "Error",
+                            description:"Wrong password please try again",
+                        });
+                        return navigate("/");
+                    }else if (error.status === 402) {
+                        toast({
+                            title: "Error",
+                            description: "User not found Please Sign-In",
+                        });
+                        return navigate("/");
+                    }else if (error.status === 500) {
+                        toast({
+                            title: "Error",
+                            description: "Server error verifying the user at sighn-In",
+                        });
+                        return navigate("/");
+                    }
+                    navigate("/");
+                    console.log(error.status)
+                }
+                console.log(formData)
+                
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    },[formData])
 
-    // const sendSignUpReq = useCallback(async () => {
-    //     const req = await axios.post("https://my-app.ayushthestar8679.workers.dev/api/v1/user/signup", {
-            
-    //     })
-    //     console.log(req);
-    // }, [])
+    const handleSignInWithGoogle = useCallback(async () => {
+        const googleProvider = new GoogleAuthProvider();
+        await signInWithGoogle(navigate ,googleProvider, signInWithPopup);
+    },[]);
+
+    const handleSignInWithGithub = useCallback(async () => {
+        const githubProvider = new GithubAuthProvider();
+        await signInWithGithub(navigate ,githubProvider, signInWithPopup);
+    },[]);
 
     return (
         <Dialog open={isSignInValue} onOpenChange={setIsSignIn}>
@@ -88,8 +143,8 @@ export default function DialogSignInButton({
             </DialogHeader>
             <div className="grid gap-4 px-4 sm:px-8">
             <div>
-                <Label htmlFor="email" className="block mb-1">
-                Email
+                <Label htmlFor="userName" className="block mb-1">
+                User Name
                 </Label>
                 <Input
                 id="UsrName"
@@ -122,6 +177,7 @@ export default function DialogSignInButton({
                 type="button"
                 variant="outline"
                 className="flex items-center rounded-3xl border-gray-900 justify-center w-full gap-2"
+                onClick={signInByEmail}
                 >
                 <MdEmail className="2-5 h-5"/>
                 Sign In With User Name
@@ -132,6 +188,7 @@ export default function DialogSignInButton({
                 type="button"
                 variant="outline"
                 className="flex items-center rounded-3xl border-gray-900 justify-center w-full gap-2"
+                onClick={() => handleSignInWithGoogle()}
                 >
                 <FaGoogle className="w-5 h-5" />
                 Sign In with Google
@@ -140,6 +197,7 @@ export default function DialogSignInButton({
                 type="button"
                 variant="outline"
                 className="flex items-center rounded-3xl border-gray-900 justify-center w-full gap-2"
+                onClick={() => handleSignInWithGithub()}
                 >
                 <FaGithub className="w-5 h-5" />
                 Sign In with Github

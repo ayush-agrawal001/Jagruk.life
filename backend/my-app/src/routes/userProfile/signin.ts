@@ -30,6 +30,15 @@ signin.post('/signin', async (c) => {
             }
         })
     
+        const isUser = (user !== null);
+
+        if (!isUser) {
+            c.status(402);
+            return c.json({
+                message : "User not found"
+            })
+        }
+
         const passText = new TextEncoder().encode(usersInput.password);
     
         const hashPass = await crypto.subtle.digest(
@@ -40,7 +49,7 @@ signin.post('/signin', async (c) => {
         );
     
         const hashBase64 = Buffer.from(hashPass).toString("base64");
-    
+
         const isPass = (hashBase64 === user?.password);
         console.log(isPass);
         if (!isPass) {
@@ -56,6 +65,7 @@ signin.post('/signin', async (c) => {
         },JWT_SECRET)
 
         c.header("Authorization", `Bearer ${token}`);
+        c.status(201);
         return c.json({
             message : `Hello again ${user?.firstname}!!!`
         })

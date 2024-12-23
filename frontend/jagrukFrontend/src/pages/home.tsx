@@ -2,8 +2,35 @@ import Footer from "@/components/footer";
 import DialogSignUpButton from "@/components/signUpPopup";
 import { NavBar } from "@/components/topNavBar";
 import { Cover } from "@/components/ui/cover";
+import { Toaster } from "@/components/ui/toaster";
+// import { auth } from "@/firebase";
+// import { onAuthStateChanged } from "firebase/auth";
+// import { useEffect } from "react";
+// import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Home() {
+  
+  // const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       if (user.emailVerified) {
+  //         // Allow access to content
+  //         console.log("User is verified.");
+  //         navigate("/dashboard")
+  //         // return <Navigate to = "/dashboard"></Navigate>
+  //       } else {
+  //         // Restrict access and notify the user
+  //         console.log("Please verify your email.");
+  //       }
+  //     } else {
+  //       console.log("No user is signed in.");
+  //     }
+  //   });
+  // }, [])
+
+
   return (
     <div className="bg-green-100 dark:bg-neutral-900 min-h-screen">
       <NavBar></NavBar>
@@ -34,6 +61,7 @@ export default function Home() {
             transition-all duration-300`}></DialogSignUpButton>
           </div>
         </div>
+        <Toaster></Toaster>
       </div>
       <Footer></Footer>
     </div>

@@ -1,3 +1,4 @@
+import { SignUpfield } from "@ayush8679/common";
 import { atom } from "recoil";
 
 export const isSignInPop = atom({
@@ -7,5 +8,10 @@ export const isSignInPop = atom({
 
 export const isSignUpPop = atom({
     key : "isSignUnPop",
+    default : false
+});
+
+export const isUserVerified = atom({
+    key : "isUserVerified",
     default : false
 });
