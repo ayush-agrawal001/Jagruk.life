@@ -8,13 +8,16 @@ import { useRecoilValue } from "recoil";
 export default function WaitingPage() {
   // const [pollingTime] = useState<number>(500);
   const [timeElapsed, setTimeElapsed] = useState<number>(0);
-  const TIMEOUT_LIMIT = 60000; // 1 minute in milliseconds
+  const TIMEOUT_LIMIT = 180000; // 1 minute in milliseconds
   const isUser = useRecoilValue(isUserVerified);
 
-  setInterval(() => {
-    setTimeElapsed((prev) => prev + 1000);
-  }, 1000);
-
+  useEffect(() => {
+    setInterval(() => {
+      setTimeElapsed((prev) => prev + 500);
+    }, 1000);
+    return () => clearInterval(1000);
+  }, []);
+  
   const progress = (timeElapsed / TIMEOUT_LIMIT) * 100;
 
   return (
@@ -22,8 +25,8 @@ export default function WaitingPage() {
       <div className="p-8 bg-white rounded-lg shadow-md">
         {!isUser ? (
           <>
-            <h1 className="text-2xl font-bold mb-4">Verify your email</h1>
-            <p className="mb-4">Please check your inbox and click the verification link.</p>
+            <h1 className="text-2xl font-bold mb-4">Please Have a moment</h1>
+            <p className="mb-4">Choose Your account login.</p>
             <ProgressBar progress={progress} />
             <p className="mt-2 text-sm text-gray-600">
               Time remaining: {Math.round((TIMEOUT_LIMIT - timeElapsed) / 1000)}s
@@ -66,7 +69,7 @@ export default function WaitingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
               >
-                Email verified
+                Welcome to Jagruk!!!
               </motion.h1>
             </div>
           </motion.div>

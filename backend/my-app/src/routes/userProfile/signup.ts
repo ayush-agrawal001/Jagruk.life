@@ -44,7 +44,8 @@ signup.post('/signup',async (c) => {
                 firstname : usersInput.firstName,
                 lastname : usersInput.lastName,
                 password : hashBase64,
-                email : usersInput.email
+                email : usersInput.email,
+                socialMedia : [],
             }
         })
 
@@ -56,7 +57,6 @@ signup.post('/signup',async (c) => {
             expiresIn : "24h",
         },JWT_SECRET)
 
-        c.header("Authorization", `Bearer ${token}`);
         c.status(201);
         return c.json({
             message : `Hello from SignUp!! ${users.firstname}`,

@@ -1,4 +1,3 @@
-import { SignUpfield } from "@ayush8679/common";
 import { atom } from "recoil";
 
 export const isSignInPop = atom({

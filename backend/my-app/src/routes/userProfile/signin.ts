@@ -64,10 +64,10 @@ signin.post('/signin', async (c) => {
             expiresIn : "24h",
         },JWT_SECRET)
 
-        c.header("Authorization", `Bearer ${token}`);
         c.status(201);
         return c.json({
-            message : `Hello again ${user?.firstname}!!!`
+            message : `Hello again ${user?.firstname}!!!`,
+            token : token
         })
     } catch (error) {
         console.log("Error", error);

@@ -12,8 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCallback, useState } from "react";
-import { useRecoilState } from "recoil";
-import { isSignInPop, isSignUpPop } from "@/atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { isSignInPop, isSignUpPop, isUserVerified, userLoginInfo } from "@/atoms";
 import { signInField, SignInField } from "@ayush8679/common";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
@@ -118,14 +118,18 @@ export default function DialogSignInButton({
         }
     },[formData])
 
+    const setIsUser = useSetRecoilState(isUserVerified);
+
     const handleSignInWithGoogle = useCallback(async () => {
+        navigate("/verifyemail");
         const googleProvider = new GoogleAuthProvider();
-        await signInWithGoogle(navigate ,googleProvider, signInWithPopup);
+        await signInWithGoogle(navigate ,googleProvider, signInWithPopup, setIsUser);
     },[]);
 
     const handleSignInWithGithub = useCallback(async () => {
+        navigate("/verifyemail");
         const githubProvider = new GithubAuthProvider();
-        await signInWithGithub(navigate ,githubProvider, signInWithPopup);
+        await signInWithGithub(navigate ,githubProvider, signInWithPopup, setIsUser);
     },[]);
 
     return (
