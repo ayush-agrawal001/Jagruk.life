@@ -10,18 +10,18 @@ import {
 import { Separator } from "@/components/ui/separator"
 
 interface ArticleCardProps {
-  id: number
+  id: string
   title: string
   excerpt: string
   author: string
   date: string
-  readTime: string
   image?: string
 }
 
-export const ArticleCard = React.memo(function ArticleCard({ id, title, excerpt, author, date, readTime, image }: ArticleCardProps) {
+export const ArticleCard = React.memo(function ArticleCard({ id, title, excerpt, author, date, image }: ArticleCardProps) {
+  const readTime = Math.floor(Math.random() * 10) + 3;
   return (
-    <Card className="border-0 shadow-none bg-background">
+    <Card id={id} className="border-0 shadow-none bg-background">
       <CardContent className="p-0 grid grid-cols-4 gap-4">
         <div className="col-span-3 space-y-2">
           <div className="flex items-center space-x-2">

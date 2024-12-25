@@ -33,7 +33,7 @@ signin.post('/signin', async (c) => {
         const isUser = (user !== null);
 
         if (!isUser) {
-            c.status(402);
+            c.status(403);
             return c.json({
                 message : "User not found"
             })

@@ -1,28 +1,31 @@
+import { topic } from '@/atoms'
+import { useRecoilState } from 'recoil'
+
 export function Nav() {
-    const topics = [
-      "For you",
-      "Following",
-      "Education",
-      "Entrepreneurship",
-      "React",
-      "UX",
-      "Web Dev"
-    ]
+  const [selectedTopic, setSelectedTopic] = useRecoilState(topic)
   
-    return (
-      <nav className="border-b bg-secondary">
-        <div className="container max-w-7xl mx-auto flex h-12 items-center space-x-4 px-4 lg:px-8">
-          {topics.map((topic) => (
-            <button
-              key={topic}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              {topic}
-            </button>
-          ))}
-        </div>
-      </nav>
-    )
+  const topics = [
+    "For you",
+    "Following"
+  ]
+  
+  return (
+    <div className=''>
+      <div className="border-b top-0 border-dashed container max-w-7xl mx-auto flex h-12 items-center space-x-4 px-4 lg:px-8">
+        {topics.map((topic) => (
+        <button
+          key={topic}
+          onClick={() => setSelectedTopic(topic)}
+          className={`text-sm transition-colors ${
+          selectedTopic === topic 
+            ? "text-primary font-medium" 
+            : "text-muted-foreground hover:text-primary"
+          }`}
+        >
+          {topic}
+        </button>
+        ))}
+      </div>
+    </div>
+  )
   }
-  
-  

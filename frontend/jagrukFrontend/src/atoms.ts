@@ -14,3 +14,8 @@ export const isUserVerified = atom({
     key : "isUserVerified",
     default : false
 });
+
+export const topic = atom({
+    key : "topic",
+    default : "For you"
+});

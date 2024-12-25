@@ -13,9 +13,9 @@ profilePic.post("/profilepic", async (c) => {
         const user = await prisma.users.findFirst({where : {id : userId}})
     
         const userSocialMedia = user?.socialMedia;
-    
-        userSocialMedia![0] = body.profilePic; 
-    
+        
+        userSocialMedia![0] = body.profilePic;
+        console.log(userSocialMedia);        
         const updatedUser = await prisma.users.update({
             where : {id : userId},
             data : {

@@ -70,13 +70,12 @@ export function Header() {
                 console.error("No auth token found");
                 return;
             }
-            const response = await axios.get<ProfileInfo>("http://127.0.0.1:8787/api/v1/user/getprofileinfo", {
+            const response = await axios.get<ProfileInfo>("http://127.0.0.1:8787/api/v1/user/update/getprofileinfo", {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 }
             });
-
             setUserProfile(response.data.profilePic);
             setFallbackText(response.data.fallbackText);
         } catch (error) {
@@ -87,7 +86,7 @@ export function Header() {
     useEffect(() => {
       setTimeout(() => {
         getProfileInfo();
-      }, 2000);
+      }, 1);
     }, []);
 
     return (

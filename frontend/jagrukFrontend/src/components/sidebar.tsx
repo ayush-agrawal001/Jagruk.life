@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 export function Sidebar() {
   return (
     <div className="w-[350px] shrink-0">
-      <Card className="bg-secondary">
+      <Card className="border-0 border-l border-dashed rounded-none shadow-none ">
         <CardHeader>
           <CardTitle className="text-primary">Staff Picks</CardTitle>
         </CardHeader>

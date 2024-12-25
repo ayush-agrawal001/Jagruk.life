@@ -24,6 +24,7 @@ model users {
   bio String? @default("")
   socialMedia String[]
   posts posts[]
+  createdAt DateTime @default(now())
   commentsByMe comments[]
   likesByMe likesOnPosts[]
   replyByMe repliesOnComments[]
@@ -39,6 +40,7 @@ model posts {
   videos String[]
   authorId String
   author users @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
   commentsOnMe comments[]
   likedOnMe likesOnPosts[]
 }
@@ -49,6 +51,7 @@ model comments {
   likesOnComments String[]
   user_id String
   post_id String
+  createdAt DateTime @default(now())
   user users @relation(fields: [user_id], references: [id])
   post posts @relation(fields: [post_id], references: [id])
   replyOnMe repliesOnComments[]
@@ -60,6 +63,7 @@ model  repliesOnComments{
   likes String[]
   user_id String
   comments_id String
+  createdAt DateTime @default(now())
   repliedBy users @relation(fields: [user_id], references: [id])
   comments comments @relation(fields: [comments_id], references: [id])
 }
@@ -68,10 +72,9 @@ model  likesOnPosts{
   id String @id @default(cuid())
   user_id String
   post_id String
+  createdAt DateTime @default(now())
   likedBy users @relation(fields: [user_id], references: [id])
   post posts @relation(fields: [post_id], references: [id])
-
-  
   @@unique([user_id, post_id])
 }
 
@@ -81,6 +84,6 @@ model followRelationShip {
   followedTo_id String
   follower users @relation("follower", fields: [followedBy_id], references: [id])
   following users @relation("following", fields: [followedTo_id], references: [id])
-  
+  createdAt DateTime @default(now())
   @@unique([followedBy_id, followedTo_id])
 }
