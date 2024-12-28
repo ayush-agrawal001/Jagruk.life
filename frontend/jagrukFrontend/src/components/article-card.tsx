@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { MoreHorizontal, Plus, Minus, User, BookOpen, VolumeX, Flag } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
@@ -8,26 +8,63 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
+import axios from 'axios'
 
 interface ArticleCardProps {
   id: string
   title: string
   excerpt: string
   author: string
-  date: string
+  _date: string
   image?: string
 }
 
-export const ArticleCard = React.memo(function ArticleCard({ id, title, excerpt, author, date, image }: ArticleCardProps) {
+interface UserInfo {
+  id : string,
+  firstname : string,
+  lastname : string,
+  email : string,
+  bio : string,
+  username : string,
+  createdAt : string,
+}
+
+export const ArticleCard = React.memo(function ArticleCard({ id, title, excerpt, author, _date, image }: ArticleCardProps) {
   const readTime = Math.floor(Math.random() * 10) + 3;
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    id : "",
+    firstname : "",
+    lastname : "",
+    email : "",
+    bio : "",
+    username : "",
+    createdAt : "",
+  });
+  const [dateToSet, setDate] = useState<string>("");
+
+  useEffect(() => {
+    getUserInfo(author);
+  }, []);
+
+  const getUserInfo = async (articleId : string) => {
+    const response = await axios.get("http://127.0.0.1:8787/api/v1/user/getinfo/" + articleId, {
+      headers : {
+        Authorization : `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    setUserInfo(response.data);
+    const date = new Date(_date);
+    setDate(date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear());
+  };
+  
   return (
-    <Card id={id} className="border-0 shadow-none bg-background">
+    <Card id={id} className="hover:cursor-pointer border-0 shadow-none bg-background">
       <CardContent className="p-0 grid grid-cols-4 gap-4">
         <div className="col-span-3 space-y-2">
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-primary">{author}</span>
+            <span className="text-sm text-primary">{userInfo.firstname} {userInfo.lastname}</span>
             <span className="text-sm text-muted-foreground">·</span>
-            <span className="text-sm text-muted-foreground">{date}</span>
+            <span className="text-sm text-muted-foreground">{dateToSet}</span>
           </div>
           <h2 className="text-xl font-bold text-foreground">{title}</h2>
           <p className="text-muted-foreground">{excerpt}</p>
