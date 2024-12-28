@@ -149,7 +149,7 @@ export function Header() {
               Write
             </Button>
           </a>
-            <Avatar className='hover:cursor-pointer'>
+            <Avatar className='w-10 h-10 hover:cursor-pointer'>
                 <AvatarImage src={userProfilePic}/>
                 <AvatarFallback>{fallbackText}</AvatarFallback>
             </Avatar>

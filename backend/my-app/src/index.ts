@@ -14,6 +14,7 @@ import likeBlog from './routes/blog/likeBlog'
 import followUser from './routes/userProfile/followUser'
 import { cors } from 'hono/cors'
 import { profilePic } from './routes/userProfile/addProfilePic'
+import getUserInfo from './routes/userProfile/getUserInfo'
 
 const app = new Hono<{Bindings : {
   DATABASE_URL : string,
@@ -51,7 +52,8 @@ app.route('/api/v1/user/blog/', blog);
 app.route('/api/v1/user/blog/', commentRoute);
 app.route('/api/v1/user/blog/', commentReply);
 app.route('/api/v1/user/blog/', likeBlog);
-app.route("/api/v1/user/update/", updateUser)
-app.route("/api/v1/user/update/", profilePic)
+app.route("/api/v1/user/update/", updateUser);
+app.route("/api/v1/user/update/", profilePic);
+app.route("/api/v1/user/getinfo/", getUserInfo);
 
 export default app
