@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCallback, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { isSignInPop, isSignUpPop, isUserVerified } from "@/atoms";
+import { isSignInPop, isSignUpPop, isUserVerified, userLoginInfo } from "@/atoms";
 import { signInField, SignInField } from "@ayush8679/common";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Header } from "../components/header"
 import { Nav } from "../components/nav"
 import { ArticleCard } from "../components/article-card"
@@ -33,6 +33,7 @@ import axios from 'axios'
 //   }
 // };
 
+const INITIAL_ARTICLE_COUNT = 20;
 const ARTICLES_PER_LOAD = 5;
 
 interface Article {
@@ -46,6 +47,7 @@ interface Article {
 }
 
 export default function Dashboard() {
+  const [articles, setArticles] = useState<Article[]>([]);
   const [displayedArticles, setDisplayedArticles] = useState<Article[]>([]);
   // const [loading, setLoading] = useState(false);
 
@@ -55,9 +57,10 @@ export default function Dashboard() {
         Authorization : `Bearer ${localStorage.getItem("token")}`
       }
     });
+    setArticles(response.data.slice(0, ARTICLES_PER_LOAD));
     setDisplayedArticles(response.data.slice(0, ARTICLES_PER_LOAD));
   };
-  
+
   // Generate initial set of articles
   useEffect(() => {
     getArticles();
@@ -68,14 +71,14 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <div className='flex w-[84vw] justify-center mx-auto'>
+      <div className='flex w-[84vw] items-center justify-center mx-auto'>
         <div className="container max-w-7xl mx-auto px-4 lg:px-8">
           <Nav /> 
           <div className="flex gap-6 py-6">
             <main className="flex-1">
               <div className="grid gap-8">
                 {displayedArticles.map((article, index) => (
-                  <ArticleCard id={article.id} key={index} title={article.title} excerpt={article.content} author={article.authorId} _date={article.createdAt} image={article.images[0]} />
+                  <ArticleCard id={article.id} key={index} title={article.title} excerpt={article.content} author={article.authorId} date={article.createdAt} image={article.images[0]} />
                 ))}
               </div>
               {/* {loading && (
