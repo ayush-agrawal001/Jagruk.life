@@ -50,7 +50,8 @@ profilePic.get("/getprofileinfo", async (c) => {
 
         return c.json({
             profilePic : user?.socialMedia[0] || "",
-            fallbackText : fallbackText
+            fallbackText : fallbackText,
+            id : userId
         })
     } catch (error) {
         console.error("Error getting profile info", error);

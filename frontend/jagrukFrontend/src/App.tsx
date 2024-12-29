@@ -23,7 +23,7 @@ function App() {
           <Route path='/signin' element={<SignIn></SignIn>}  ></Route>
           <Route path='/verifyemail' element={<WaitingPage></WaitingPage>}></Route>
           <Route path='/write' element={<WriteEditor></WriteEditor>}></Route>
-          <Route path='/profile' element={<Profile></Profile>}></Route>
+          <Route path='/profile/:id' element={<Profile></Profile>}></Route>
           <Route path='*' element={<Home></Home>}></Route>
       </Routes>
       </RecoilRoot>

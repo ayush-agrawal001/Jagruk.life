@@ -19,6 +19,7 @@ getUserInfo.get("/:userId", async (c) => {
             email: true,
             bio: true,
             username: true,
+            socialMedia: true,
             createdAt: true,
         },
     });

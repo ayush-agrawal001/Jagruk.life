@@ -11,8 +11,11 @@ import { Separator } from "@/components/ui/separator"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from './ui/avatar'
 import { AvatarImage } from '@radix-ui/react-avatar'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import axios from 'axios'
+import { useRecoilState } from 'recoil'
+import { userProfileMeta } from '@/atoms'
+import { useNavigate } from 'react-router-dom'
 
 // Sample notifications data
 const notifications = [
@@ -55,12 +58,13 @@ const notifications = [
 
 export function Header() {
 
-    const [userProfilePic, setUserProfile] = useState("");
-    const [fallbackText, setFallbackText] = useState("AA");
+    const navigate = useNavigate();
+    const [userProfilePic, setUserProfile] = useRecoilState(userProfileMeta);
 
     interface ProfileInfo {
         profilePic : string,
         fallbackText : string
+        id : string
     }
 
     const getProfileInfo = async () => {
@@ -76,8 +80,7 @@ export function Header() {
                     "Authorization": `Bearer ${token}`
                 }
             });
-            setUserProfile(response.data.profilePic);
-            setFallbackText(response.data.fallbackText);
+            setUserProfile({ profilePic : response.data.profilePic, fallbackText : response.data.fallbackText, id : response.data.id });
         } catch (error) {
             console.error("Failed to fetch profile info:", error);
         }
@@ -149,9 +152,9 @@ export function Header() {
               Write
             </Button>
           </a>
-            <Avatar className='w-10 h-10 hover:cursor-pointer'>
-                <AvatarImage src={userProfilePic}/>
-                <AvatarFallback>{fallbackText}</AvatarFallback>
+            <Avatar className='w-10 h-10 hover:cursor-pointer' onClick={() => {navigate("/profile/" + userProfilePic.id)}}>
+                <AvatarImage src={userProfilePic.profilePic}/>
+                <AvatarFallback>{userProfilePic.fallbackText}</AvatarFallback>
             </Avatar>
         </div>
       </div>

@@ -67,15 +67,6 @@ export function EditProfileDialog({
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="handle">Handle</Label>
-              <Input
-                id="handle"
-                name="handle"
-                defaultValue={profile.handle}
-                required
-              />
-            </div>
-            <div className="grid gap-2">
               <Label htmlFor="bio">Bio</Label>
               <Textarea
                 id="bio"

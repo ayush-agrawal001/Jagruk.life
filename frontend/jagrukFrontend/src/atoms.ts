@@ -19,3 +19,12 @@ export const topic = atom({
     key : "topic",
     default : "For you"
 });
+
+export const userProfileMeta = atom({
+    key : "userProfileMeta",
+    default : {
+        profilePic : "",
+        fallbackText : "AA",
+        id : ""
+    }
+});

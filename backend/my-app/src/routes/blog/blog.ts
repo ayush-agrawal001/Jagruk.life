@@ -98,6 +98,24 @@ blog.get('/id/:id', async (c) => {
     }
 })
 
+blog.get("/:userId/posts", async (c) => {
+    try {
+        const userId = c.req.param("userId");
+        const prisma = createPrismaClient(c);
+        const post = await prisma.posts.findMany({
+            where : {
+                authorId : userId
+            }
+        })
+        return c.json({posts : post, count : post.length}); 
+    } catch (error) {
+        console.log(error);
+        return c.json({
+            error : "Something went wrong at getting the blog post"
+        })
+    }
+})
+
 blog.get('/bulk', async (c) => {
     try {
         console.log("bulk blog")
