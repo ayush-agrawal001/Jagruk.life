@@ -7,8 +7,8 @@ import SignIn from './pages/signin'
 import { RecoilRoot} from "recoil"
 import WaitingPage from './pages/verifyEmail'
 import Dashboard from './pages/dashboard'
-import { WriteEditor } from './components/write-editor'
 import Profile from './pages/profile'
+import BlogEditor from './pages/write'
 
 function App() {
 
@@ -22,9 +22,9 @@ function App() {
           <Route path='/dashboard' element={<Dashboard></Dashboard>}  ></Route>      
           <Route path='/signin' element={<SignIn></SignIn>}  ></Route>
           <Route path='/verifyemail' element={<WaitingPage></WaitingPage>}></Route>
-          <Route path='/write' element={<WriteEditor></WriteEditor>}></Route>
+          <Route path='/write' element={<BlogEditor />}></Route>
           <Route path='/profile/:id' element={<Profile></Profile>}></Route>
-          <Route path='*' element={<Home></Home>}></Route>
+          {/* <Route path='*' element={<Home></Home>}></Route> */}
       </Routes>
       </RecoilRoot>
     </BrowserRouter>

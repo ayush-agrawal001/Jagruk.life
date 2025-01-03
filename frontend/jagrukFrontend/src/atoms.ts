@@ -28,3 +28,8 @@ export const userProfileMeta = atom({
         id : ""
     }
 });
+
+export const fileAtom = atom({
+    key : "fileAtom",
+    default : ""    
+});
