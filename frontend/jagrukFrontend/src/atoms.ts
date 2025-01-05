@@ -31,5 +31,5 @@ export const userProfileMeta = atom({
 
 export const fileAtom = atom({
     key : "fileAtom",
-    default : ""    
+    default : ""
 });
