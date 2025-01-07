@@ -35,14 +35,22 @@ model users {
 model posts {
   id String @id @default(cuid())
   title String
-  content String
-  images String[]
-  videos String[]
   authorId String
   author users @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
   commentsOnMe comments[]
   likedOnMe likesOnPosts[]
+  postsContent postsContent[]
+}
+
+model postsContent {
+  id String @id @default(cuid())
+  position Int
+  content String @default("")
+  images String @default("")
+  link String @default("")
+  postId String
+  post posts @relation(fields: [postId], references: [id])
 }
 
 model comments {

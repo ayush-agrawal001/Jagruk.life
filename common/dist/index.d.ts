@@ -57,23 +57,100 @@ export declare const signInField: z.ZodObject<{
     password: string;
 }>;
 export declare const createBlogField: z.ZodObject<{
-    postId: z.ZodNumber;
+    postId: z.ZodString;
     title: z.ZodString;
-    content: z.ZodString;
-    image: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    video: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    postContent: z.ZodOptional<z.ZodObject<{
+        contentText: z.ZodArray<z.ZodObject<{
+            content: z.ZodOptional<z.ZodString>;
+            position: z.ZodOptional<z.ZodNumber>;
+        }, "strip", z.ZodTypeAny, {
+            content?: string | undefined;
+            position?: number | undefined;
+        }, {
+            content?: string | undefined;
+            position?: number | undefined;
+        }>, "many">;
+        contentImage: z.ZodArray<z.ZodObject<{
+            image: z.ZodOptional<z.ZodString>;
+            position: z.ZodOptional<z.ZodNumber>;
+        }, "strip", z.ZodTypeAny, {
+            position?: number | undefined;
+            image?: string | undefined;
+        }, {
+            position?: number | undefined;
+            image?: string | undefined;
+        }>, "many">;
+        contentLink: z.ZodArray<z.ZodObject<{
+            link: z.ZodOptional<z.ZodString>;
+            position: z.ZodOptional<z.ZodNumber>;
+        }, "strip", z.ZodTypeAny, {
+            position?: number | undefined;
+            link?: string | undefined;
+        }, {
+            position?: number | undefined;
+            link?: string | undefined;
+        }>, "many">;
+    }, "strip", z.ZodTypeAny, {
+        contentText: {
+            content?: string | undefined;
+            position?: number | undefined;
+        }[];
+        contentImage: {
+            position?: number | undefined;
+            image?: string | undefined;
+        }[];
+        contentLink: {
+            position?: number | undefined;
+            link?: string | undefined;
+        }[];
+    }, {
+        contentText: {
+            content?: string | undefined;
+            position?: number | undefined;
+        }[];
+        contentImage: {
+            position?: number | undefined;
+            image?: string | undefined;
+        }[];
+        contentLink: {
+            position?: number | undefined;
+            link?: string | undefined;
+        }[];
+    }>>;
 }, "strip", z.ZodTypeAny, {
-    postId: number;
+    postId: string;
     title: string;
-    content: string;
-    image?: string[] | undefined;
-    video?: string[] | undefined;
+    postContent?: {
+        contentText: {
+            content?: string | undefined;
+            position?: number | undefined;
+        }[];
+        contentImage: {
+            position?: number | undefined;
+            image?: string | undefined;
+        }[];
+        contentLink: {
+            position?: number | undefined;
+            link?: string | undefined;
+        }[];
+    } | undefined;
 }, {
-    postId: number;
+    postId: string;
     title: string;
-    content: string;
-    image?: string[] | undefined;
-    video?: string[] | undefined;
+    postContent?: {
+        contentText: {
+            content?: string | undefined;
+            position?: number | undefined;
+        }[];
+        contentImage: {
+            position?: number | undefined;
+            image?: string | undefined;
+        }[];
+        contentLink: {
+            position?: number | undefined;
+            link?: string | undefined;
+        }[];
+    } | undefined;
 }>;
 export declare const updateBlogField: z.ZodObject<{
     postId: z.ZodNumber;
@@ -83,15 +160,15 @@ export declare const updateBlogField: z.ZodObject<{
     video: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
     postId: number;
-    title?: string | undefined;
     content?: string | undefined;
     image?: string[] | undefined;
+    title?: string | undefined;
     video?: string[] | undefined;
 }, {
     postId: number;
-    title?: string | undefined;
     content?: string | undefined;
     image?: string[] | undefined;
+    title?: string | undefined;
     video?: string[] | undefined;
 }>;
 export declare const addComment: z.ZodObject<{

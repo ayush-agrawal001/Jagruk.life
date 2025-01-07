@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils"
 import { useRecoilState } from "recoil";
 import { fileAtom } from "@/atoms";
 import { Input } from "./ui/input";
-import LinkDialogue from "./linkDialougue";
 
 interface EditorToolbarProps {
   onInsertCodeBlock: () => void;

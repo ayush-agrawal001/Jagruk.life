@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button"
-import { BellIcon, MoreHorizontal } from 'lucide-react'
+import PublishDialog from "./publish_dialoge";
 
-export function EditorHeader() {
+interface EditorHeaderProps {
+  handlePostPublish: () => Promise<void>;
+}
+
+export function EditorHeader({ handlePostPublish }: EditorHeaderProps) {
+
   return (
     <header className="flex items-center justify-between border-b p-4">
       <div className="flex items-center gap-4 justify-center">
@@ -10,17 +15,10 @@ export function EditorHeader() {
         </a>
       </div>
       <div className="mr-44 flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <BellIcon className="w-4 h-4" />
-          <span className="sr-only">Notifications</span>
-        </Button>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <MoreHorizontal className="w-4 h-4" />
-          <span className="sr-only">More options</span>
-        </Button>
-        <Button className="rounded-full bg-green-600 hover:bg-green-700">
+        {/* <Button onClick={handlePublish} className="rounded-full bg-green-600 hover:bg-green-700">
           Publish
-        </Button>
+        </Button> */}
+        <PublishDialog handlePostPublish={handlePostPublish}></PublishDialog>
       </div>
     </header>
   )

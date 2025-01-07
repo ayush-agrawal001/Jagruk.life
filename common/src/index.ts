@@ -13,7 +13,7 @@ export const updateUserFields = z.object({
     lastName : z.string().min(3).max(50).optional(),
     userName : z.string().min(6).max(8).optional(),
     password : z.string().min(8).max(50).optional(),
-    oldPassword : z.string().min(3).max(50).optional(),
+    oldPassword : z.string().min(8).max(50).optional(),
     email : z.string().email().optional(),
     bio : z.string().optional(),
     socialMedia : z.string().max(200).optional().array(),
@@ -24,13 +24,28 @@ export const signInField = z.object({
     password : z.string().min(8).max(50)
 });
 
-export const createBlogField = z.object({
-    postId : z.number(),
-    title : z.string().min(3).max(50),
-    content : z.string().min(3).max(1000),
-    image : z.string().min(3).max(250).array().optional(),
-    video : z.string().min(3).max(250).array().optional(),
+
+const postContentText = z.object({
+    content : z.string().min(3).max(1000).optional(),
+    position : z.number().min(1).optional(),
 })
+
+const postContentImage = z.object({
+    image : z.string().min(3).max(250).optional(),
+    position : z.number().min(1).optional(),
+})
+
+const postContentLink = z.object({
+    link : z.string().min(3).max(250).optional(),
+    position : z.number().min(1).optional(),
+})
+
+export   const createBlogField = z.object({
+    postId : z.string(),
+    title : z.string().min(3).max(50),
+    postContent : z.object({contentText : z.array(postContentText), contentImage : z.array(postContentImage), contentLink : z.array(postContentLink)}).optional(),
+})
+
 
 export const updateBlogField = z.object({
     postId : z.number(),

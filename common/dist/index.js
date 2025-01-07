@@ -14,7 +14,7 @@ exports.updateUserFields = zod_1.z.object({
     lastName: zod_1.z.string().min(3).max(50).optional(),
     userName: zod_1.z.string().min(6).max(8).optional(),
     password: zod_1.z.string().min(8).max(50).optional(),
-    oldPassword: zod_1.z.string().min(3).max(50).optional(),
+    oldPassword: zod_1.z.string().min(8).max(50).optional(),
     email: zod_1.z.string().email().optional(),
     bio: zod_1.z.string().optional(),
     socialMedia: zod_1.z.string().max(200).optional().array(),
@@ -23,12 +23,22 @@ exports.signInField = zod_1.z.object({
     userName: zod_1.z.string().min(6).max(8),
     password: zod_1.z.string().min(8).max(50)
 });
+const postContentText = zod_1.z.object({
+    content: zod_1.z.string().min(3).max(1000).optional(),
+    position: zod_1.z.number().min(1).optional(),
+});
+const postContentImage = zod_1.z.object({
+    image: zod_1.z.string().min(3).max(250).optional(),
+    position: zod_1.z.number().min(1).optional(),
+});
+const postContentLink = zod_1.z.object({
+    link: zod_1.z.string().min(3).max(250).optional(),
+    position: zod_1.z.number().min(1).optional(),
+});
 exports.createBlogField = zod_1.z.object({
-    postId: zod_1.z.number(),
+    postId: zod_1.z.string(),
     title: zod_1.z.string().min(3).max(50),
-    content: zod_1.z.string().min(3).max(1000),
-    image: zod_1.z.string().min(3).max(250).array().optional(),
-    video: zod_1.z.string().min(3).max(250).array().optional(),
+    postContent: zod_1.z.object({ contentText: zod_1.z.array(postContentText), contentImage: zod_1.z.array(postContentImage), contentLink: zod_1.z.array(postContentLink) }).optional(),
 });
 exports.updateBlogField = zod_1.z.object({
     postId: zod_1.z.number(),

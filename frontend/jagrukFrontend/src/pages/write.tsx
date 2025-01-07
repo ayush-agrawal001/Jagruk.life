@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { v4 as uuidv4 } from "uuid";
 import { fileAtom } from "@/atoms";
@@ -10,11 +10,17 @@ import { X } from 'lucide-react';
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from 'prismjs';
 import { Link } from "react-router-dom";
+import DynamicTextareaProps from "../components/dynamicTextArea";
+import axios from "axios";
+import PublishDialog from "@/components/publish_dialoge";
+import { Toaster } from "@/components/ui/toaster";
+import { error } from "console";
 
 type BlockType = 'text' | 'image' | 'code' | 'link';
 
 interface Block {
   id: string;
+  position: number;
   type: BlockType;
   content: string;
 }
@@ -22,9 +28,11 @@ interface Block {
 export default function BlogEditor() {
   const [title, setTitle] = useState("");
   const [blocks, setBlocks] = useState<Block[]>([
-    { id: uuidv4(), type: 'text', content: '' }
+    { id: uuidv4(), type: 'text', content: '' , position: 0 }
   ]);
   const imageUrl = useRecoilValue(fileAtom);
+  const [isPostPublished, setIsPostPublished] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleBlockChange = (id: string, content: string) => {
     setBlocks(blocks.map(block => 
@@ -36,8 +44,8 @@ export default function BlogEditor() {
     const codeBlock = "Your code here"
     setBlocks(prev => [
       ...prev,
-      { id: uuidv4(), type: 'code', content: codeBlock },
-      { id: uuidv4(), type: 'text', content: '' }
+      { id: uuidv4(), type: 'code', content: codeBlock, position: prev[prev.length - 1].position + 1 },
+      { id: uuidv4(), type: 'text', content: '', position: prev[prev.length - 1].position + 2 }
     ]);
   }
 
@@ -45,16 +53,16 @@ export default function BlogEditor() {
     if (!imageUrl || typeof imageUrl !== 'string') return;
     setBlocks(prev => [
       ...prev,
-      { id: uuidv4(), type: 'image', content: imageUrl as string },
-      { id: uuidv4(), type: 'text', content: '' }
+      { id: uuidv4(), type: 'image', content: imageUrl as string , position: prev[prev.length - 1].position + 1 },
+      { id: uuidv4(), type: 'text', content: '' , position: prev[prev.length - 1].position + 2 }
     ]);
   };
 
   const onInsertLink = (content: string) => {
     setBlocks(prev => [
       ...prev,
-      { id: uuidv4(), type: 'link', content: content},
-      { id: uuidv4(), type: 'text', content: '' }
+      { id: uuidv4(), type: 'link', content: content, position: prev[prev.length - 1].position + 1 },
+      { id: uuidv4(), type: 'text', content: '' , position: prev[prev.length - 1].position + 2 }
     ]);
   }
 
@@ -62,10 +70,41 @@ export default function BlogEditor() {
     setBlocks(blocks.filter(block => block.id !== id));
   };
 
+  const contentTextArray = blocks.filter(block => block.type === 'text' && block.content !== "");
+  const contentImageArray = blocks.filter(block => block.type === 'image' && block.content !== "");
+  const contentLinkArray = blocks.filter(block => block.type === 'link' && block.content !== "");
+
+  const onPostPublish = useCallback(async () => {
+    try {
+      const postPublishReq = await axios.post("http://127.0.0.1:8787/api/v1/user/blog/", {
+            title: title,
+            postContent :{
+              contentText: contentTextArray,
+              contentImage: contentImageArray,
+              contentLink: contentLinkArray
+            }
+      }, {
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
+          },
+      });
+      if (postPublishReq.data === "Added your blog") {
+        setIsPostPublished(true);
+      }else {
+        setErrorMessage("Something went wrong at publishing the blog 01");
+        console.log(postPublishReq.data);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }, [blocks])
+
   return (
     <div className="min-h-screen bg-background">
-      <EditorHeader />
+      <EditorHeader handlePostPublish={onPostPublish} />
       <main className="container max-w-3xl mx-auto px-4 py-6">
+
         <div className="space-y-6">
           <input
             type="text"
@@ -79,12 +118,10 @@ export default function BlogEditor() {
             {blocks.map(block => (
               <div key={block.id} className="relative group">
                 {block.type === 'text' && (
-                  <div>
-                  <textarea
-                    value={block.content}
+                  <div className="">
+                  <DynamicTextareaProps
+                    content={block.content}
                     onChange={(e) => handleBlockChange(block.id, e.target.value)}
-                    placeholder="Tell your story..."
-                    className="w-full min-h-[100px] text-lg outline-none bg-transparent placeholder:text-muted-foreground resize-none font-mono"
                   />
                   <Button
                   variant="ghost"
@@ -167,6 +204,7 @@ export default function BlogEditor() {
           </div>
         </div>
       </main>
+      <Toaster></Toaster>
     </div>
   );
 }

@@ -4,6 +4,24 @@ import { createPrismaClient } from "../..";
 
 const blog = new Hono();
 
+interface PostContent {
+    postId : string;
+    content : string;
+    position : number;
+}
+
+interface PostContentImage {
+    postId : string;
+    images : string;
+    position : number;
+}
+
+interface PostContentLink {
+    postId : string;
+    link : string;
+    position : number;
+}
+
 blog.post('/', async (c) => {
     try {
         const prisma = createPrismaClient(c);
@@ -21,15 +39,46 @@ blog.post('/', async (c) => {
             })
         }
         const usersInput = parsedData.data
-        const user = await prisma.posts.create({
+        const post = await prisma.posts.create({
             data : {
                 title : usersInput.title,
-                content : usersInput.content,
                 authorId : userId,
-                images : usersInput.image,
-                videos : usersInput.video,
             }
         })
+
+        const postContentTextData = usersInput.postContent?.contentText;
+        const postContentImageData = usersInput.postContent?.contentImage;
+        const postContentLinkData = usersInput.postContent?.contentLink;
+
+        const postContentData : PostContent[] = [];
+        const postImageData : PostContentImage[] = [];
+        const postLinkData : PostContentLink[] = [];
+
+        for (let postContent of postContentTextData!){ 
+            postContentData.push({postId : post.id, content : String(postContent.content), position : postContent.position!})
+        }
+        for (let postContent of postContentImageData!){ 
+            postImageData.push({postId : post.id, images : String(postContent.image), position : postContent.position!})
+        }
+        for (let postContent of postContentLinkData!){ 
+            postLinkData.push({postId : post.id, link : String(postContent.link), position : postContent.position!})
+        }
+
+
+        try {
+            const postContent = await prisma.postsContent.createMany({
+                data : [
+                    ...(postContentData ? postContentData : []),
+                    ...(postImageData ? postImageData : []),
+                    ...(postLinkData ? postLinkData : [])
+                ]
+            })
+        } catch (error) {
+            console.log(error);
+            return c.json({
+                message : "Error creating Post Content"
+            })
+        }
 
         return c.text("Added your blog");
     } catch (error) {
@@ -62,7 +111,7 @@ blog.patch("/", async (c) => {
             where : { id : String(usersInput.postId) },
             data : {
                 title : usersInput.title && usersInput.title,
-                content : usersInput.content && usersInput.content,
+                // content : usersInput.content && usersInput.content,
              }
         })
         
