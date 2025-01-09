@@ -22,6 +22,12 @@ interface PostContentLink {
     position : number;
 }
 
+interface PostContentCode {
+    postId : string;
+    code : string;
+    position : number;
+}
+
 blog.post('/', async (c) => {
     try {
         const prisma = createPrismaClient(c);
@@ -49,19 +55,24 @@ blog.post('/', async (c) => {
         const postContentTextData = usersInput.postContent?.contentText;
         const postContentImageData = usersInput.postContent?.contentImage;
         const postContentLinkData = usersInput.postContent?.contentLink;
+        const postContentCodeData = usersInput.postContent?.codeBlock;
 
         const postContentData : PostContent[] = [];
         const postImageData : PostContentImage[] = [];
         const postLinkData : PostContentLink[] = [];
+        const postCodeData : PostContentCode[] = [];
 
         for (let postContent of postContentTextData!){ 
             postContentData.push({postId : post.id, content : String(postContent.content), position : postContent.position!})
         }
         for (let postContent of postContentImageData!){ 
-            postImageData.push({postId : post.id, images : String(postContent.image), position : postContent.position!})
+            postImageData.push({postId : post.id, images : String(postContent.content), position : postContent.position!})
         }
         for (let postContent of postContentLinkData!){ 
-            postLinkData.push({postId : post.id, link : String(postContent.link), position : postContent.position!})
+            postLinkData.push({postId : post.id, link : String(postContent.content), position : postContent.position!})
+        }
+        for (let postContent of postContentCodeData!){ 
+            postCodeData.push({postId : post.id, code : String(postContent.content), position : postContent.position!})
         }
 
 
@@ -70,7 +81,8 @@ blog.post('/', async (c) => {
                 data : [
                     ...(postContentData ? postContentData : []),
                     ...(postImageData ? postImageData : []),
-                    ...(postLinkData ? postLinkData : [])
+                    ...(postLinkData ? postLinkData : []),
+                    ...(postCodeData ? postCodeData : [])
                 ]
             })
         } catch (error) {

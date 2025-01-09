@@ -27,25 +27,28 @@ export const signInField = z.object({
 
 const postContentText = z.object({
     content : z.string().min(3).max(1000).optional(),
-    position : z.number().min(1).optional(),
+    position : z.number().min(0).optional(),
 })
 
 const postContentImage = z.object({
-    image : z.string().min(3).max(250).optional(),
-    position : z.number().min(1).optional(),
+    content : z.string().min(3).max(250).optional(),
+    position : z.number().min(0).optional(),
 })
 
 const postContentLink = z.object({
-    link : z.string().min(3).max(250).optional(),
-    position : z.number().min(1).optional(),
+    content : z.string().min(3).max(250).optional(),
+    position : z.number().min(0).optional(),
+})
+
+const postContentCode = z.object({
+    content : z.string().min(3).max(1000).optional(),
+    position : z.number().min(0).optional(),
 })
 
 export   const createBlogField = z.object({
-    postId : z.string(),
     title : z.string().min(3).max(50),
-    postContent : z.object({contentText : z.array(postContentText), contentImage : z.array(postContentImage), contentLink : z.array(postContentLink)}).optional(),
+    postContent : z.object({contentText : z.array(postContentText).optional(), contentImage : z.array(postContentImage).optional(), contentLink : z.array(postContentLink).optional(), codeBlock : z.array(postContentCode).optional()}).optional(),
 })
-
 
 export const updateBlogField = z.object({
     postId : z.number(),

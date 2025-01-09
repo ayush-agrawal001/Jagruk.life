@@ -5,10 +5,11 @@
     "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
-    "@ayush8679/common": "^1.0.144",
+    "@ayush8679/common": "^1.0.148",
     "@prisma/client": "^5.22.0",
     "@prisma/extension-accelerate": "^1.2.1",
     "@types/bcrypt": "^5.0.2",
+    "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "buffer": "^6.0.3",
     "crypto": "^1.0.1",

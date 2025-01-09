@@ -9,7 +9,7 @@ import { X } from 'lucide-react';
 // import { CopyBlock, dracula } from "react-code-blocks";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from 'prismjs';
-import { Link } from "react-router-dom";
+import { Await, data, Link } from "react-router-dom";
 import DynamicTextareaProps from "../components/dynamicTextArea";
 import axios from "axios";
 import PublishDialog from "@/components/publish_dialoge";
@@ -70,35 +70,88 @@ export default function BlogEditor() {
     setBlocks(blocks.filter(block => block.id !== id));
   };
 
-  const contentTextArray = blocks.filter(block => block.type === 'text' && block.content !== "");
-  const contentImageArray = blocks.filter(block => block.type === 'image' && block.content !== "");
-  const contentLinkArray = blocks.filter(block => block.type === 'link' && block.content !== "");
+  let contentTextArray = blocks.filter(block => block.type === 'text' && block.content !== "");
+  let contentImageArray = blocks.filter(block => block.type === 'image' && block.content !== "");
+  let contentLinkArray = blocks.filter(block => block.type === 'link' && block.content !== "");
+  let contentCodeArray = blocks.filter(block => block.type === 'code' && block.content !== "");
+
+  const [imageTempLink, setImageTempLink] = useState<string>("");
+  const [errorBlob, setErrorBlob] = useState<string>("");
 
   const onPostPublish = useCallback(async () => {
     try {
-      const postPublishReq = await axios.post("http://127.0.0.1:8787/api/v1/user/blog/", {
-            title: title,
-            postContent :{
-              contentText: contentTextArray,
-              contentImage: contentImageArray,
-              contentLink: contentLinkArray
-            }
-      }, {
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${localStorage.getItem('token')}`
-          },
-      });
-      if (postPublishReq.data === "Added your blog") {
-        setIsPostPublished(true);
-      }else {
-        setErrorMessage("Something went wrong at publishing the blog 01");
-        console.log(postPublishReq.data);
-      }
-    } catch (error) {
+          
+      const uploadImage = async (imageBlob: Blob) => {
+        try {
+            // Convert blob to base64
+            const base64 = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(imageBlob);
+            });
+    
+            // Remove the data:image/xxx;base64, prefix
+            const base64String = (base64 as string).split(',')[1];
+    
+            const response = await axios.post(
+                "http://127.0.0.1:8787/api/v1/user/uploadimage/", 
+                { image: base64String },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+            
+            return response.data.imageUrl;
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            throw error;
+        }
+    }
+      for (let imageTempLinkBlock of contentImageArray) {
+        try {
+            const response = await fetch(imageTempLinkBlock.content);
+            const blob = await response.blob();
+            console.log('Blob:', blob);
+            
+            const imageUrl = await uploadImage(blob);
+            setImageTempLink(imageUrl);
+            console.log(imageUrl)
+            imageTempLinkBlock.content = imageUrl;
+        } catch (error) {
+            console.error('Error fetching Blob:', error);
+            setErrorBlob("Something went wrong at publishing the blog 02");
+            throw error;
+        }
+    }
+
+        const postPublishReq = await axios.post("http://127.0.0.1:8787/api/v1/user/blog/", {
+              title: title,
+              postContent :{
+                contentText: contentTextArray,
+                contentImage: contentImageArray,
+                contentLink: contentLinkArray,
+                codeBlock: contentCodeArray
+              }
+        }, {
+            headers: {
+              'Content-Type': 'application/json',
+              "Authorization": `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+        if (postPublishReq.data === "Added your blog") {
+          setIsPostPublished(true);
+        }else {
+          setErrorMessage("Something went wrong at publishing the blog 01");
+          console.log(postPublishReq.data);
+          throw error;
+        }        
+        }catch (error) {
       throw error;
     }
-  }, [blocks])
+  }, [blocks, imageTempLink, errorBlob])
 
   return (
     <div className="min-h-screen bg-background">

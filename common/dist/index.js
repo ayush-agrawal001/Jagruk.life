@@ -25,20 +25,23 @@ exports.signInField = zod_1.z.object({
 });
 const postContentText = zod_1.z.object({
     content: zod_1.z.string().min(3).max(1000).optional(),
-    position: zod_1.z.number().min(1).optional(),
+    position: zod_1.z.number().min(0).optional(),
 });
 const postContentImage = zod_1.z.object({
-    image: zod_1.z.string().min(3).max(250).optional(),
-    position: zod_1.z.number().min(1).optional(),
+    content: zod_1.z.string().min(3).max(250).optional(),
+    position: zod_1.z.number().min(0).optional(),
 });
 const postContentLink = zod_1.z.object({
-    link: zod_1.z.string().min(3).max(250).optional(),
-    position: zod_1.z.number().min(1).optional(),
+    content: zod_1.z.string().min(3).max(250).optional(),
+    position: zod_1.z.number().min(0).optional(),
+});
+const postContentCode = zod_1.z.object({
+    content: zod_1.z.string().min(3).max(1000).optional(),
+    position: zod_1.z.number().min(0).optional(),
 });
 exports.createBlogField = zod_1.z.object({
-    postId: zod_1.z.string(),
     title: zod_1.z.string().min(3).max(50),
-    postContent: zod_1.z.object({ contentText: zod_1.z.array(postContentText), contentImage: zod_1.z.array(postContentImage), contentLink: zod_1.z.array(postContentLink) }).optional(),
+    postContent: zod_1.z.object({ contentText: zod_1.z.array(postContentText).optional(), contentImage: zod_1.z.array(postContentImage).optional(), contentLink: zod_1.z.array(postContentLink).optional(), codeBlock: zod_1.z.array(postContentCode).optional() }).optional(),
 });
 exports.updateBlogField = zod_1.z.object({
     postId: zod_1.z.number(),

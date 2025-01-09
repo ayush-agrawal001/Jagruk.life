@@ -49,6 +49,7 @@ model postsContent {
   content String @default("")
   images String @default("")
   link String @default("")
+  codeData String @default("")
   postId String
   post posts @relation(fields: [postId], references: [id])
 }

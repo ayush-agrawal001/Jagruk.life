@@ -57,10 +57,9 @@ export declare const signInField: z.ZodObject<{
     password: string;
 }>;
 export declare const createBlogField: z.ZodObject<{
-    postId: z.ZodString;
     title: z.ZodString;
     postContent: z.ZodOptional<z.ZodObject<{
-        contentText: z.ZodArray<z.ZodObject<{
+        contentText: z.ZodOptional<z.ZodArray<z.ZodObject<{
             content: z.ZodOptional<z.ZodString>;
             position: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
@@ -69,87 +68,111 @@ export declare const createBlogField: z.ZodObject<{
         }, {
             content?: string | undefined;
             position?: number | undefined;
-        }>, "many">;
-        contentImage: z.ZodArray<z.ZodObject<{
-            image: z.ZodOptional<z.ZodString>;
+        }>, "many">>;
+        contentImage: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            content: z.ZodOptional<z.ZodString>;
             position: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
+            content?: string | undefined;
             position?: number | undefined;
-            image?: string | undefined;
         }, {
+            content?: string | undefined;
             position?: number | undefined;
-            image?: string | undefined;
-        }>, "many">;
-        contentLink: z.ZodArray<z.ZodObject<{
-            link: z.ZodOptional<z.ZodString>;
+        }>, "many">>;
+        contentLink: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            content: z.ZodOptional<z.ZodString>;
             position: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
+            content?: string | undefined;
             position?: number | undefined;
-            link?: string | undefined;
         }, {
+            content?: string | undefined;
             position?: number | undefined;
-            link?: string | undefined;
-        }>, "many">;
+        }>, "many">>;
+        codeBlock: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            content: z.ZodOptional<z.ZodString>;
+            position: z.ZodOptional<z.ZodNumber>;
+        }, "strip", z.ZodTypeAny, {
+            content?: string | undefined;
+            position?: number | undefined;
+        }, {
+            content?: string | undefined;
+            position?: number | undefined;
+        }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        contentText: {
+        contentText?: {
             content?: string | undefined;
             position?: number | undefined;
-        }[];
-        contentImage: {
+        }[] | undefined;
+        contentImage?: {
+            content?: string | undefined;
             position?: number | undefined;
-            image?: string | undefined;
-        }[];
-        contentLink: {
+        }[] | undefined;
+        contentLink?: {
+            content?: string | undefined;
             position?: number | undefined;
-            link?: string | undefined;
-        }[];
+        }[] | undefined;
+        codeBlock?: {
+            content?: string | undefined;
+            position?: number | undefined;
+        }[] | undefined;
     }, {
-        contentText: {
+        contentText?: {
             content?: string | undefined;
             position?: number | undefined;
-        }[];
-        contentImage: {
+        }[] | undefined;
+        contentImage?: {
+            content?: string | undefined;
             position?: number | undefined;
-            image?: string | undefined;
-        }[];
-        contentLink: {
+        }[] | undefined;
+        contentLink?: {
+            content?: string | undefined;
             position?: number | undefined;
-            link?: string | undefined;
-        }[];
+        }[] | undefined;
+        codeBlock?: {
+            content?: string | undefined;
+            position?: number | undefined;
+        }[] | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
-    postId: string;
     title: string;
     postContent?: {
-        contentText: {
+        contentText?: {
             content?: string | undefined;
             position?: number | undefined;
-        }[];
-        contentImage: {
+        }[] | undefined;
+        contentImage?: {
+            content?: string | undefined;
             position?: number | undefined;
-            image?: string | undefined;
-        }[];
-        contentLink: {
+        }[] | undefined;
+        contentLink?: {
+            content?: string | undefined;
             position?: number | undefined;
-            link?: string | undefined;
-        }[];
+        }[] | undefined;
+        codeBlock?: {
+            content?: string | undefined;
+            position?: number | undefined;
+        }[] | undefined;
     } | undefined;
 }, {
-    postId: string;
     title: string;
     postContent?: {
-        contentText: {
+        contentText?: {
             content?: string | undefined;
             position?: number | undefined;
-        }[];
-        contentImage: {
+        }[] | undefined;
+        contentImage?: {
+            content?: string | undefined;
             position?: number | undefined;
-            image?: string | undefined;
-        }[];
-        contentLink: {
+        }[] | undefined;
+        contentLink?: {
+            content?: string | undefined;
             position?: number | undefined;
-            link?: string | undefined;
-        }[];
+        }[] | undefined;
+        codeBlock?: {
+            content?: string | undefined;
+            position?: number | undefined;
+        }[] | undefined;
     } | undefined;
 }>;
 export declare const updateBlogField: z.ZodObject<{
@@ -161,14 +184,14 @@ export declare const updateBlogField: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     postId: number;
     content?: string | undefined;
-    image?: string[] | undefined;
     title?: string | undefined;
+    image?: string[] | undefined;
     video?: string[] | undefined;
 }, {
     postId: number;
     content?: string | undefined;
-    image?: string[] | undefined;
     title?: string | undefined;
+    image?: string[] | undefined;
     video?: string[] | undefined;
 }>;
 export declare const addComment: z.ZodObject<{
