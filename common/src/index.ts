@@ -26,27 +26,27 @@ export const signInField = z.object({
 
 
 const postContentText = z.object({
-    content : z.string().min(3).max(1000).optional(),
+    content : z.string().min(3).optional(),
     position : z.number().min(0).optional(),
 })
 
 const postContentImage = z.object({
-    content : z.string().min(3).max(250).optional(),
+    content : z.string().min(3).optional(),
     position : z.number().min(0).optional(),
 })
 
 const postContentLink = z.object({
-    content : z.string().min(3).max(250).optional(),
+    content : z.string().min(3).optional(),
     position : z.number().min(0).optional(),
 })
 
 const postContentCode = z.object({
-    content : z.string().min(3).max(1000).optional(),
+    content : z.string().min(3).optional(),
     position : z.number().min(0).optional(),
 })
 
 export   const createBlogField = z.object({
-    title : z.string().min(3).max(50),
+    title : z.string().min(3),
     postContent : z.object({contentText : z.array(postContentText).optional(), contentImage : z.array(postContentImage).optional(), contentLink : z.array(postContentLink).optional(), codeBlock : z.array(postContentCode).optional()}).optional(),
 })
 

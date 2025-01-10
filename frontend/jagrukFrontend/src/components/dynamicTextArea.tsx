@@ -1,4 +1,3 @@
-import { on } from 'events'
 import React, { useRef, useEffect, ChangeEvent, useState } from 'react'
 
 interface DynamicTextareaProps {

@@ -24,19 +24,19 @@ exports.signInField = zod_1.z.object({
     password: zod_1.z.string().min(8).max(50)
 });
 const postContentText = zod_1.z.object({
-    content: zod_1.z.string().min(3).max(1000).optional(),
+    content: zod_1.z.string().min(3).optional(),
     position: zod_1.z.number().min(0).optional(),
 });
 const postContentImage = zod_1.z.object({
-    content: zod_1.z.string().min(3).max(250).optional(),
+    content: zod_1.z.string().min(3).optional(),
     position: zod_1.z.number().min(0).optional(),
 });
 const postContentLink = zod_1.z.object({
-    content: zod_1.z.string().min(3).max(250).optional(),
+    content: zod_1.z.string().min(3).optional(),
     position: zod_1.z.number().min(0).optional(),
 });
 const postContentCode = zod_1.z.object({
-    content: zod_1.z.string().min(3).max(1000).optional(),
+    content: zod_1.z.string().min(3).optional(),
     position: zod_1.z.number().min(0).optional(),
 });
 exports.createBlogField = zod_1.z.object({

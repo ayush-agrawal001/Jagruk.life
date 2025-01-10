@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import { useNavigate } from "react-router-dom"
 
 interface Post {
   id: string
@@ -9,8 +9,10 @@ interface Post {
 }
 
 export function PostCard({ post }: { post: Post }) {
+  const navigate = useNavigate();
+
   return (
-    <Card className="mb-4">
+    <Card className="mb-4 hover:cursor-pointer" onClick={() => navigate(`/blog/${post.id}`)}>
       <CardContent className="pt-6">
         <div className="flex gap-4">
           <div className="flex-1">
@@ -21,7 +23,6 @@ export function PostCard({ post }: { post: Post }) {
                 {new Date(post.createdAt).toDateString()}
               </span>
             </div>
-            <p className="mt-2">{post.content}</p>
           </div>
         </div>
       </CardContent>

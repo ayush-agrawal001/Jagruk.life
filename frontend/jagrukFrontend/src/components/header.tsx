@@ -13,7 +13,7 @@ import { AvatarImage } from '@radix-ui/react-avatar'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { useRecoilState } from 'recoil'
-import { userProfileMeta } from '@/atoms'
+import {  searchArticlesAtom, userProfileMeta } from '@/atoms'
 import { useNavigate } from 'react-router-dom'
 
 // Sample notifications data
@@ -21,44 +21,31 @@ const notifications = [
   {
     id: 1,
     type: 'new',
-    title: 'Your story has been published',
-    description: 'Your story "Getting Started with React" is now live.',
-    time: '5m ago'
+    title: 'Welcome to Jagruk.life',
+    description: 'You have the pen to write your own story.',
+    time: 'now'
   },
   {
     id: 2,
     type: 'new',
-    title: 'New follower',
-    description: 'John Doe started following you',
-    time: '10m ago'
+    title: 'Start now',
+    description: 'No one is waiting bruhhh.',
+    time: 'life ago'
   },
   {
     id: 3,
-    type: 'read',
-    title: 'Story approved',
-    description: 'Your story has been approved by the publication',
-    time: '1h ago'
+    type: 'new',
+    title: 'Make your mark',
+    description: 'You are the first one to write about this.',
+    time: 'now'
   },
-  {
-    id: 4,
-    type: 'read',
-    title: 'Comment on your story',
-    description: 'Sarah left a comment on your story',
-    time: '2h ago'
-  },
-  {
-    id: 5,
-    type: 'read',
-    title: 'Your story is trending',
-    description: 'Your story is gaining traction in React community',
-    time: '3h ago'
-  }
 ]
 
-export function Header() {
+export function Header({ showSearch = true }: { showSearch?: boolean }) {
 
     const navigate = useNavigate();
     const [userProfilePic, setUserProfile] = useRecoilState(userProfileMeta);
+    const [searchArticles, setSearchArticles] = useRecoilState(searchArticlesAtom);
 
     interface ProfileInfo {
         profilePic : string,
@@ -97,12 +84,12 @@ export function Header() {
         <a href="/" className="flex items-center space-x-2">
           <span className="text-xl font-serif text-primary">Jagruk.life</span>
         </a>
-        <div className="flex items-center space-x-4 ml-4">
+        {showSearch && <div className="hidden lg:flex items-center space-x-4 ml-4 ">
           <div className="relative w-60">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search" className="pl-8 bg-secondary" />
+            <Input placeholder="Search" className="pl-8 bg-secondary" value={searchArticles} onChange={(e) => setSearchArticles(e.target.value)}/>
           </div>
-        </div>
+        </div>}
         <div className="ml-auto flex items-center space-x-4">
           <Popover>
             <PopoverTrigger asChild>

@@ -3,7 +3,7 @@ import DialogSignUpButton from "@/components/signUpPopup";
 import { NavBar } from "@/components/topNavBar";
 import { Cover } from "@/components/ui/cover";
 import { Toaster } from "@/components/ui/toaster";
-import { auth } from ".././../firebase/index";
+import { auth } from "../firebase/index";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,25 +14,25 @@ import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       if (user.emailVerified) {
-  //         // Allow access to content
-  //         console.log("User is verified.");
-  //         navigate("/dashboard")
-  //         // return <Navigate to = "/dashboard"></Navigate>
-  //       } else {
-  //         // Restrict access and notify the user
-  //         console.log("Please verify your email.");
-  //       }
-  //     } else {
-  //       console.log("No user is signed in.");
-  //     }
-  //   });
-  // }, [])
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          // Allow access to content
+          console.log("User is verified.");
+          navigate("/dashboard")
+          // return <Navigate to = "/dashboard"></Navigate>
+        } else {
+          // Restrict access and notify the user
+          console.log("Please verify your email.");
+        }
+      } else {
+        console.log("No user is signed in.");
+      }
+    });
+  }, [])
 
 
   return (

@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 
 export function NavBar() {
     return (
-      <div className="fixed top-0 z-10 w-full h-14 px-4 md:px-10 lg:px-64 flex items-center border-b-2 border-gray-400">
+      <div className="fixed backdrop-blur-lg top-0 z-10 w-full h-14 px-4 md:px-10 lg:px-64 flex items-center border-b-2 border-gray-400">
         <button className="text-gray-500 hover:text-green-500">
           <h1 className="text-xl md:text-2xl text-black font-serif font-semibold hover:text-green-800">
             Jagruk.life

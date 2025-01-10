@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { ImageIcon, Users, Code2, Link2, Quote, MoreHorizontal, Plus } from 'lucide-react'
+import { ImageIcon, Code2, Link2, Plus } from 'lucide-react' 
 import { cn } from "@/lib/utils"
 import { useRecoilState } from "recoil";
 import { fileAtom } from "@/atoms";

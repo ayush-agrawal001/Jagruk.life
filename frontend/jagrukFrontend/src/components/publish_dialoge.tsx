@@ -53,7 +53,7 @@ export default function PublishDialog({ handlePostPublish } : EditorHeaderProps)
                     </DialogDescription>
                 </DialogHeader>
                 <div className="py-4">
-                    <Alert variant="warning">
+                    <Alert variant="destructive">
                         <AlertTriangle className="h-4 w-4" />
                         <AlertTitle>Warning</AlertTitle>
                         <AlertDescription>

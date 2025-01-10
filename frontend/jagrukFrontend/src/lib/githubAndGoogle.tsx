@@ -1,4 +1,4 @@
-import { auth } from "../../firebase/index";
+import { auth } from "../firebase/index";
 import { toast } from "@/hooks/use-toast";
 import axios from "axios";
 

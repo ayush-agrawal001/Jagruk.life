@@ -9,10 +9,9 @@ import { X } from 'lucide-react';
 // import { CopyBlock, dracula } from "react-code-blocks";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from 'prismjs';
-import { Await, data, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import DynamicTextareaProps from "../components/dynamicTextArea";
 import axios from "axios";
-import PublishDialog from "@/components/publish_dialoge";
 import { Toaster } from "@/components/ui/toaster";
 import { error } from "console";
 
@@ -31,8 +30,8 @@ export default function BlogEditor() {
     { id: uuidv4(), type: 'text', content: '' , position: 0 }
   ]);
   const imageUrl = useRecoilValue(fileAtom);
-  const [isPostPublished, setIsPostPublished] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [_isPostPublished, setIsPostPublished] = useState(false);
+  const [_errorMessage, setErrorMessage] = useState("");
 
   const handleBlockChange = (id: string, content: string) => {
     setBlocks(blocks.map(block => 

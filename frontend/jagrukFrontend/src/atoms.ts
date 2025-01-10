@@ -33,3 +33,8 @@ export const fileAtom = atom({
     key : "fileAtom",
     default : ""
 });
+
+export const searchArticlesAtom = atom<string>({
+    key : "searchArticlesAtom",
+    default : ""
+});

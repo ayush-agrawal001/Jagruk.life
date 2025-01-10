@@ -1,15 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CheckCircle, Hash, MessageCircle, Plus, Send, UserCheck, UserPlus } from 'lucide-react'
+import { CheckCircle, MessageCircle, Plus, Send, UserCheck, UserPlus } from 'lucide-react'
 import { EditProfileDialog } from "@/components/edit-profile-dialouge"
-import { CreatePostDialog } from "@/components/create-post-dialogue"
 import { PostCard } from "@/components/post-card"
 import { Header } from "@/components/header"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useRecoilValue } from "recoil"
-import { userProfileMeta } from "@/atoms"
 import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
 import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog"
@@ -43,7 +40,7 @@ interface ProfileData {
 
 export default function Profile() {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
-  const [isCreatePostOpen, setIsCreatePostOpen] = useState(false)
+  // const [isCreatePostOpen, setIsCreatePostOpen] = useState(false)
   const [profilePic, setProfilePic] = useState<string>("");
   const [checkIsUser, setCheckIsUser] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -342,7 +339,6 @@ export default function Profile() {
                   </div>
                 )}
               </TabsContent>
-              {/* Add other TabsContent components as needed */}
             </Tabs>
           </CardContent>
         </Card>
@@ -363,7 +359,16 @@ export default function Profile() {
   )
 }
 
-const FollowerAndFollowingDialog  = ({showFollowers, setShowFollowers, showFollowing, setShowFollowing, followers, following}) => {
+interface FollowerAndFollowingDialogProps {
+  showFollowers: boolean;
+  setShowFollowers: (value: boolean) => void;
+  showFollowing: boolean;
+  setShowFollowing: (value: boolean) => void;
+  followers: any[];
+  following: any[];
+}
+
+const FollowerAndFollowingDialog: React.FC<FollowerAndFollowingDialogProps> = ({showFollowers, setShowFollowers, showFollowing, setShowFollowing, followers, following}) => {
   return (
     <div> 
   <Dialog open={showFollowers} onOpenChange={setShowFollowers}>
@@ -417,7 +422,7 @@ const FollowerAndFollowingDialog  = ({showFollowers, setShowFollowers, showFollo
 }
 
 
-const MessageDialog = ( {showMessages, setShowMessages}) => (
+const MessageDialog = ( {showMessages, setShowMessages} : { showMessages : boolean, setShowMessages : React.Dispatch<React.SetStateAction<boolean>>}) => (
   <div>
             {/* Messages Sheet */}
             <Sheet open={showMessages} onOpenChange={setShowMessages}>

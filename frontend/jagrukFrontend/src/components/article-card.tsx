@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 interface ArticleCardProps {
   id: string
@@ -30,6 +31,7 @@ interface UserInfo {
 }
 
 export const ArticleCard = React.memo(function ArticleCard({ id, title, excerpt, author, _date, image }: ArticleCardProps) {
+  const navigate = useNavigate();
   const readTime = Math.floor(Math.random() * 10) + 3;
   const [userInfo, setUserInfo] = useState<UserInfo>({
     id : "",
@@ -58,87 +60,104 @@ export const ArticleCard = React.memo(function ArticleCard({ id, title, excerpt,
   };
   
   return (
-    <Card id={id} className="hover:cursor-pointer border-0 shadow-none bg-background">
-      <CardContent className="p-0 grid grid-cols-4 gap-4">
-        <div className="col-span-3 space-y-2">
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-primary">{userInfo.firstname} {userInfo.lastname}</span>
-            <span className="text-sm text-muted-foreground">·</span>
-            <span className="text-sm text-muted-foreground">{dateToSet}</span>
-          </div>
-          <h2 className="text-xl font-bold text-foreground">{title}</h2>
-          <p className="text-muted-foreground">{excerpt}</p>
-        </div>
-        {image && (
-          <div className="col-span-1">
-            <img src={image} alt="" className="rounded-md object-cover w-full h-32" />
-          </div>
-        )}
-      </CardContent>
-      <CardFooter className="p-0 mt-4">
-        <div className="flex items-center justify-between w-full">
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-muted-foreground">{readTime} min read</span>
-          </div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-primary">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80" align="end">
-              <div className="grid gap-4">
-                <div className="grid gap-2">
-                  <div className="grid gap-1">
-                    <Button variant="ghost" className="w-full justify-start gap-2">
-                      <Plus className="h-4 w-4" />
-                      <div className="grid gap-1 text-left">
-                        <div className="font-medium">Show more</div>
-                        <div className="text-xs text-muted-foreground">Recommend more stories like this to me.</div>
-                      </div>
-                    </Button>
-                    <Button variant="ghost" className="w-full justify-start gap-2">
-                      <Minus className="h-4 w-4" />
-                      <div className="grid gap-1 text-left">
-                        <div className="font-medium">Show less</div>
-                        <div className="text-xs text-muted-foreground">Recommend fewer stories like this to me.</div>
-                      </div>
-                    </Button>
+    <Card id={id} className="font-serif lg:h-80 hover:cursor-pointer shadow-2xl bg-background">
+  <CardContent
+    onClick={() => navigate(`/blog/${id}`)}
+    className="p-4 grid grid-cols-1 gap-4 sm:grid-cols-4"
+  >
+    <div className="space-y-2 sm:col-span-3">
+      <div className="flex items-center space-x-2">
+        <span className="text-sm text-primary">
+          {userInfo.firstname} {userInfo.lastname}
+        </span>
+        <span className="text-sm text-muted-foreground">·</span>
+        <span className="text-sm text-muted-foreground">{dateToSet}</span>
+      </div>
+      <Separator className="w-5/12 bg-gray-100" />
+      <h2 className="text-lg font-bold text-foreground sm:text-xl">{title}</h2>
+      <Separator className="w-full" />
+      <p className="truncate lg:text-wrap lg:text-clip lg:h-36 w-full text-muted-foreground">{excerpt}</p>
+    </div>
+    {image && (
+      <div className="flex justify-center items-center">
+        <img
+          src={image}
+          alt=""
+          className="rounded-md object-cover w-full h-40 sm:h-56"
+        />
+      </div>
+    )}
+  </CardContent>
+  <CardFooter className="pb-8">
+    <div className="flex flex-col items-start space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+      <span className="text-sm text-muted-foreground">{readTime} min read</span>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="ghost" size="icon" className="text-primary">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-full sm:w-80">
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <div className="grid gap-1">
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <Plus className="h-4 w-4" />
+                  <div className="grid gap-1 text-left">
+                    <div className="font-medium">Show more</div>
+                    <div className="text-xs text-muted-foreground">
+                      Recommend more stories like this to me.
+                    </div>
                   </div>
-                  <Separator />
-                  <div className="grid gap-1">
-                    <Button variant="ghost" className="w-full justify-start gap-2">
-                      <User className="h-4 w-4" />
-                      <span>Follow author</span>
-                    </Button>
-                    <Button variant="ghost" className="w-full justify-start gap-2">
-                      <BookOpen className="h-4 w-4" />
-                      <span>Follow publication</span>
-                    </Button>
+                </Button>
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <Minus className="h-4 w-4" />
+                  <div className="grid gap-1 text-left">
+                    <div className="font-medium">Show less</div>
+                    <div className="text-xs text-muted-foreground">
+                      Recommend fewer stories like this to me.
+                    </div>
                   </div>
-                  <Separator />
-                  <div className="grid gap-1">
-                    <Button variant="ghost" className="w-full justify-start gap-2">
-                      <VolumeX className="h-4 w-4" />
-                      <span>Mute author</span>
-                    </Button>
-                    <Button variant="ghost" className="w-full justify-start gap-2">
-                      <VolumeX className="h-4 w-4" />
-                      <span>Mute publication</span>
-                    </Button>
-                  </div>
-                  <Separator />
-                  <Button variant="ghost" className="w-full justify-start gap-2 text-destructive">
-                    <Flag className="h-4 w-4" />
-                    <span>Report story...</span>
-                  </Button>
-                </div>
+                </Button>
               </div>
-            </PopoverContent>
-          </Popover>
-        </div>
-      </CardFooter>
-    </Card>
+              <Separator />
+              <div className="grid gap-1">
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <User className="h-4 w-4" />
+                  <span>Follow author</span>
+                </Button>
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <BookOpen className="h-4 w-4" />
+                  <span>Follow publication</span>
+                </Button>
+              </div>
+              <Separator />
+              <div className="grid gap-1">
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <VolumeX className="h-4 w-4" />
+                  <span>Mute author</span>
+                </Button>
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <VolumeX className="h-4 w-4" />
+                  <span>Mute publication</span>
+                </Button>
+              </div>
+              <Separator />
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-2 text-destructive"
+              >
+                <Flag className="h-4 w-4" />
+                <span>Report story...</span>
+              </Button>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  </CardFooter>
+</Card>
+
   )
 })
 

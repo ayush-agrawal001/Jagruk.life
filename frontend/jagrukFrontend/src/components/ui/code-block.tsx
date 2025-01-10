@@ -1,7 +1,7 @@
-import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
+import { useState } from "react";
 
 type CodeBlockProps = {
   language: string;
@@ -30,8 +30,8 @@ export const CodeBlock = ({
   highlightLines = [],
   tabs = [],
 }: CodeBlockProps) => {
-  const [copied, setCopied] = React.useState(false);
-  const [activeTab, setActiveTab] = React.useState(0);
+  const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
 
   const tabsExist = tabs.length > 0;
 

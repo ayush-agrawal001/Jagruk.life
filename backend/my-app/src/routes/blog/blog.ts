@@ -24,7 +24,7 @@ interface PostContentLink {
 
 interface PostContentCode {
     postId : string;
-    code : string;
+    codeData : string;
     position : number;
 }
 
@@ -72,7 +72,7 @@ blog.post('/', async (c) => {
             postLinkData.push({postId : post.id, link : String(postContent.content), position : postContent.position!})
         }
         for (let postContent of postContentCodeData!){ 
-            postCodeData.push({postId : post.id, code : String(postContent.content), position : postContent.position!})
+            postCodeData.push({postId : post.id, codeData : String(postContent.content), position : postContent.position!})
         }
 
 
@@ -141,8 +141,18 @@ blog.patch("/", async (c) => {
     }
 })
 
+type BlockType = 'text' | 'image' | 'code' | 'link' | 'Title';
+
+interface Block {
+  id: string;
+  type: BlockType;
+  content: string;
+  position: number;
+}
+
 blog.get('/id/:id', async (c) => {
     try {
+        const blockArray : Block[] = [];
         console.log("Single blog")
         const id = c.req.param("id");
         const prisma = createPrismaClient(c);
@@ -150,7 +160,48 @@ blog.get('/id/:id', async (c) => {
         const post = await prisma.posts.findUnique({
             where : {id : id}
         })
-        return c.json(post);
+
+        const postContentArray = await prisma.postsContent.findMany({
+            where: {
+                postId: post!.id
+            }
+        });
+
+        blockArray.push({
+            id: post!.id,
+            type: "Title",
+            content: post!.title,
+            position: -1
+        })
+
+        for (let postContent of postContentArray) {
+            let blockType : BlockType = "text";  // default value
+            let content = "";
+
+            if (postContent.content) {
+                blockType = "text";
+                content = postContent.content;
+            } else if (postContent.images) {
+                blockType = "image";
+                content = postContent.images;
+            } else if (postContent.link) {
+                blockType = "link";
+                content = postContent.link;
+            } else if (postContent.codeData) {
+                blockType = "code";
+                content = postContent.codeData;
+            }
+
+            blockArray.push({
+                id: postContent.id,
+                type: blockType,
+                content: content,
+                position: postContent.position
+            })
+        }
+
+        return c.json(blockArray);
+
     } catch (error) {
         console.log(error);
         return c.json({
@@ -168,7 +219,7 @@ blog.get("/:userId/posts", async (c) => {
                 authorId : userId
             }
         })
-        return c.json({posts : post, count : post.length}); 
+        return c.json({posts : post, count : post.length});
     } catch (error) {
         console.log(error);
         return c.json({
@@ -181,14 +232,43 @@ blog.get('/bulk', async (c) => {
     try {
         console.log("bulk blog")
         const prisma = createPrismaClient(c);
-        const post = await prisma.posts.findMany();;
-        return c.json(post);
+        const returnPost: { id: string, title: string, firstContent: string, firstImageLink?: string, authorId: string, createdAt : string }[] = [];
+        const posts = await prisma.posts.findMany();
+
+        for (const p of posts) {
+            const postContent = await prisma.postsContent.findMany({
+                where: {
+                    postId: p.id
+                }
+            });
+
+            let firstTextContent = postContent
+                .filter(post => post.content)
+                .sort((a, b) => a.position - b.position)[0];
+
+            let firstImage = postContent
+                .filter(post => post.images)
+                .sort((a, b) => a.position - b.position)[0];
+
+            if (firstTextContent) {
+                returnPost.push({
+                    id: p.id,
+                    title: p.title,
+                    firstContent: firstTextContent.content,
+                    firstImageLink: firstImage?.images,
+                    authorId: p.authorId,
+                    createdAt : String(p.createdAt)
+                });
+            }
+        }
+
+        return c.json(returnPost);
     } catch (error) {
         console.log(error);
         return c.json({
-            error : "Something went wrong at getting the bulk blog post"
-        })
+            error: "Something went wrong at getting the bulk blog post"
+        });
     }
-})
+});
 
 export default blog;
