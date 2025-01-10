@@ -49,7 +49,7 @@ export const ArticleCard = React.memo(function ArticleCard({ id, title, excerpt,
   }, []);
 
   const getUserInfo = async (articleId : string) => {
-    const response = await axios.get("http://127.0.0.1:8787/api/v1/user/getinfo/" + articleId, {
+    const response = await axios.get("https://my-app.ayushthestar8679.workers.dev/api/v1/user/getinfo/" + articleId, {
       headers : {
         Authorization : `Bearer ${localStorage.getItem("token")}`
       }

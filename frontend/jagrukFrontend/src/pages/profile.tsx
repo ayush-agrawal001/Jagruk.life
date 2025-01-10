@@ -72,7 +72,7 @@ export default function Profile() {
       console.error("No auth token found");
       return;
     }
-    const response = await axios.get("http://127.0.0.1:8787/api/v1/user/getinfo/" + userId, {
+    const response = await axios.get("https://my-app.ayushthestar8679.workers.dev/api/v1/user/getinfo/" + userId, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
@@ -89,7 +89,7 @@ export default function Profile() {
       console.error("No auth token found");
       return;
     }
-    const response2 = await axios.get("http://127.0.0.1:8787/api/v1/user/" + userId + "/followers", {
+    const response2 = await axios.get("https://my-app.ayushthestar8679.workers.dev/api/v1/user/" + userId + "/followers", {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
@@ -105,7 +105,7 @@ export default function Profile() {
       console.error("No auth token found");
       return;
     }
-    const response3 = await axios.get("http://127.0.0.1:8787/api/v1/user/" + userId + "/following", {
+    const response3 = await axios.get("https://my-app.ayushthestar8679.workers.dev/api/v1/user/" + userId + "/following", {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
@@ -120,7 +120,7 @@ export default function Profile() {
       console.error("No auth token found");
       return;
     }
-    const response4 = await axios.get("http://127.0.0.1:8787/api/v1/user/blog/" + userId + "/posts", {
+    const response4 = await axios.get("https://my-app.ayushthestar8679.workers.dev/api/v1/user/blog/" + userId + "/posts", {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
@@ -138,7 +138,7 @@ export default function Profile() {
       console.error("No auth token found");
       return;
     }
-    const response5 = await axios.get("http://127.0.0.1:8787/api/v1/user/isuser/" + userId, {
+    const response5 = await axios.get("https://my-app.ayushthestar8679.workers.dev/api/v1/user/isuser/" + userId, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
@@ -185,7 +185,7 @@ export default function Profile() {
       console.error("No auth token found");
       return;
     }
-    const response = await axios.post("http://127.0.0.1:8787/api/v1/user/" + userId + "/follow", {
+    const response = await axios.post("https://my-app.ayushthestar8679.workers.dev/api/v1/user/" + userId + "/follow", {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`

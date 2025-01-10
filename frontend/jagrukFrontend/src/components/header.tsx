@@ -60,7 +60,7 @@ export function Header({ showSearch = true }: { showSearch?: boolean }) {
                 console.error("No auth token found");
                 return;
             }
-            const response = await axios.get<ProfileInfo>("http://127.0.0.1:8787/api/v1/user/update/getprofileinfo", {
+            const response = await axios.get<ProfileInfo>("https://my-app.ayushthestar8679.workers.dev/api/v1/user/update/getprofileinfo", {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
@@ -81,9 +81,9 @@ export function Header({ showSearch = true }: { showSearch?: boolean }) {
     return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container max-w-7xl mx-auto flex h-14 items-center px-4 lg:px-8">
-        <a href="/" className="flex items-center space-x-2">
+        <button onClick={() => navigate("/dashboard")}  className="flex items-center space-x-2">
           <span className="text-xl font-serif text-primary">Jagruk.life</span>
-        </a>
+        </button>
         {showSearch && <div className="hidden lg:flex items-center space-x-4 ml-4 ">
           <div className="relative w-60">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />

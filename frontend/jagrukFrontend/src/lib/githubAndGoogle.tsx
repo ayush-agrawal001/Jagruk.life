@@ -4,7 +4,7 @@ import axios from "axios";
 
 const handleAuthSignIn = async (user: any, password: string) => {
     try {
-        const response = await axios.post("http://127.0.0.1:8787/api/v1/user/signin", {
+        const response = await axios.post("https://my-app.ayushthestar8679.workers.dev/api/v1/user/signin", {
             userName: user.uid.slice(0, 7),
             email: user.email,
             password : password,
@@ -22,7 +22,7 @@ const handleAuthSignIn = async (user: any, password: string) => {
 const updateProfilePicture = async (photoURL: string | null) => {
     try {
         await axios.post(
-            "http://127.0.0.1:8787/api/v1/user/update/profilepic",
+            "https://my-app.ayushthestar8679.workers.dev/api/v1/user/update/profilepic",
             {
                 profilePic: photoURL || "",
             },
@@ -52,7 +52,7 @@ export const signInWithGoogle = async (navigate: any, googleProvider: any, signI
             const firstName = user.displayName!.split(" ")[0];
             const lastName = user.displayName!.split(" ")[1];
             
-            const response = await axios.post("http://127.0.0.1:8787/api/v1/user/signup", {
+            const response = await axios.post("https://my-app.ayushthestar8679.workers.dev/api/v1/user/signup", {
                 email: user.email,
                 firstName,
                 lastName,
@@ -91,7 +91,7 @@ export const signInWithGithub = async (navigate: any, githubProvider: any, signI
             const token = await user.getIdToken();
             console.log(token);
             
-            const response = await axios.post("http://127.0.0.1:8787/api/v1/user/signup", {
+            const response = await axios.post("https://my-app.ayushthestar8679.workers.dev/api/v1/user/signup", {
                 email: user.email,
                 firstName: user.displayName!.split(" ")[0],
                 lastName: user.displayName!.split(" ")[1],

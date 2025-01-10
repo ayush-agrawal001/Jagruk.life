@@ -77,7 +77,7 @@ export default function DialogSignInButton({
         try {
             if(checkCredentials()){
                 try {
-                    const response = await axios.post("http://127.0.0.1:8787/api/v1/user/signin", formData);
+                    const response = await axios.post("https://my-app.ayushthestar8679.workers.dev/api/v1/user/signin", formData);
                     if (response.status === 201) {
                         navigate("/dashboard");
                     }else{

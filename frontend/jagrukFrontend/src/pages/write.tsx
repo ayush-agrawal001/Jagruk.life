@@ -93,7 +93,7 @@ export default function BlogEditor() {
             const base64String = (base64 as string).split(',')[1];
     
             const response = await axios.post(
-                "http://127.0.0.1:8787/api/v1/user/uploadimage/", 
+                "https://my-app.ayushthestar8679.workers.dev/api/v1/user/uploadimage/", 
                 { image: base64String },
                 {
                     headers: {
@@ -126,7 +126,7 @@ export default function BlogEditor() {
         }
     }
 
-        const postPublishReq = await axios.post("http://127.0.0.1:8787/api/v1/user/blog/", {
+        const postPublishReq = await axios.post("https://my-app.ayushthestar8679.workers.dev/api/v1/user/blog/", {
               title: title,
               postContent :{
                 contentText: contentTextArray,
